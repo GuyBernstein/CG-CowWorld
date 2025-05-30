@@ -9,7 +9,7 @@
 #include <vector>
 #include <string>
 
-class HelpMenu : public MenuBase
+class HelpMenu final : public MenuBase
 {
 public:
     HelpMenu();

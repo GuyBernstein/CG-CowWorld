@@ -1,11 +1,9 @@
-//
-// Created by Guy Bernstein on 29/05/2025.
-//
-
 #ifndef SCENEMANAGER_H
 #define SCENEMANAGER_H
 
 #include "SceneObject.h"
+#include <vector>
+#include <memory>
 
 class SceneManager
 {
@@ -15,5 +13,7 @@ public:
     {
         m_objects.push_back(std::move(obj));
     }
+    
+    void render() const;
 };
 #endif //SCENEMANAGER_H

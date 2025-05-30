@@ -58,18 +58,18 @@ void Movement::turnRight()
     }
 }
 
-bool Movement::isValidPosition(GLfloat x, GLfloat y) const
+bool Movement::isValidPosition(const GLfloat x, const GLfloat y)
 {
     return x >= World::MIN_COORD && x <= World::MAX_COORD &&
            y >= World::MIN_COORD && y <= World::MAX_COORD;
 }
 
-WcPt3D Movement::getForwardPosition(GLfloat distance) const
+WcPt3D Movement::getForwardPosition(const GLfloat distance) const
 {
     const GLfloat radians = (m_directionAngle * M_PI) / 180.0f;
-    return WcPt3D(
+    return {
         m_position.getX() + std::cos(radians) * distance,
         m_position.getY() + std::sin(radians) * distance,
         m_position.getZ()
-    );
+    };
 }

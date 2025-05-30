@@ -8,18 +8,13 @@
 #define SCENEOBJECT_H
 
 #include <OpenGL/gl.h>
-#include <GLUT/glut.h>
 #include "WcPt3D.h"
-#include "RGBColor.h"
-#include <memory>
 
-/******************************
-*     CLASS DECLARATION       *
-*******************************/
+
 class SceneObject
 {
 public:
-    SceneObject(const WcPt3D& position = WcPt3D(), GLfloat rotation = 0.0f);
+    explicit SceneObject(const WcPt3D& position = WcPt3D(), GLfloat rotation = 0.0f);
     virtual ~SceneObject() = default;
 
     // Main rendering method
@@ -38,7 +33,8 @@ protected:
     // Helper methods for common rendering tasks
     void beginLighting();
     void endLighting();
-    void setMaterial(const GLfloat* color, const GLfloat* specular = nullptr, GLfloat shininess = 0.0f);
+
+    static void setMaterial(const GLfloat* color, const GLfloat* specular = nullptr, GLfloat shininess = 0.0f);
     void pushTransform();
     void popTransform();
 

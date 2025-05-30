@@ -6,7 +6,6 @@
 #define COWCONTROLLER_H
 
 
-#include <memory>
 #include "Movement.h"
 #include "CowHead.h"
 // #include "CowTail.h"

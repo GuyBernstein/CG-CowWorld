@@ -30,6 +30,10 @@ add_executable(maman16
         WcPt3D.h
         RGBColor.h
         WcVector3D.h
+        MenuManager.cpp
+        CowController.cpp
+        CowHead.cpp
+        SceneManager.cpp
 )
 
 target_link_libraries(maman16

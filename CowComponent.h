@@ -20,7 +20,7 @@ public:
 
 protected:
     // Common rendering helpers
-    void setMaterial(const GLfloat* ambient, const GLfloat* emission = nullptr, const GLfloat* specular = nullptr);
+    static void setMaterial(const GLfloat* ambient, const GLfloat* emission = nullptr, const GLfloat* specular = nullptr);
 
     static constexpr GLfloat BLACK_COLOR[] = {0.0f, 0.0f, 0.0f, 1.0f};
     static constexpr GLfloat WHITE_COLOR[] = {1.0f, 1.0f, 1.0f, 1.0f};

@@ -3,14 +3,16 @@
 //
 
 #include "MenuBase.h"
+
 #include "Constants.h"
+#include "RGBColor.h"
 
 constexpr GLfloat MenuBase::BACKGROUND_COLOR[];
 
-MenuBase::MenuBase(GLint width, GLint height, const std::string& title)
+MenuBase::MenuBase(const GLint width, const GLint height, std::string  title)
     : m_width(width)
     , m_height(height)
-    , m_title(title)
+    , m_title(std::move(title))
 {
 }
 
@@ -49,7 +51,7 @@ void MenuBase::render()
     renderContent();
 
     // Render buttons
-    for (auto& button : m_buttons)
+    for (const auto& button : m_buttons)
     {
         button->render();
     }
@@ -71,7 +73,7 @@ void MenuBase::handleMouse(int button, int state, int x, int y)
     y = windowHeight - y;
 
     // Check button clicks
-    for (auto& btn : m_buttons)
+    for (const auto& btn : m_buttons)
     {
         if (btn->isClicked(x - m_viewportX, y - m_viewportY))
         {
@@ -90,7 +92,7 @@ void MenuBase::centerMenu()
     m_viewportY = (windowHeight - m_height) / 2;
 }
 
-void MenuBase::renderFrame()
+void MenuBase::renderFrame() const
 {
     glColor3f(RGB_COLOR_BLACK);
     glLineWidth(FRAME_WIDTH);
@@ -103,8 +105,7 @@ void MenuBase::renderFrame()
     glEnd();
 }
 
-void MenuBase::renderTitle()
-{
+void MenuBase::renderTitle() const {
     const GLfloat centerX = m_width / 2.0f - (m_title.length() * 5.0f); // Approximate centering
     renderText(m_title, centerX, m_height - TITLE_OFFSET_Y, GLUT_BITMAP_HELVETICA_18);
 }
@@ -118,4 +119,10 @@ void MenuBase::renderText(const std::string& text, GLfloat x, GLfloat y, void* f
     {
         glutBitmapCharacter(font, c);
     }
+}
+
+void MenuBase::handleKeyboard(unsigned char key, int x, int y)
+{
+    // Default implementation - do nothing
+    // Override in derived classes if needed
 }

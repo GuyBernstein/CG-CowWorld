@@ -7,17 +7,13 @@
 
 #include <string>
 #include <vector>
-#include <memory>
 #include "Button.h"
 #include "WcPt3D.h"
 
-/******************************
-*     CLASS DECLARATION       *
-*******************************/
 class MenuBase
 {
 public:
-    MenuBase(GLint width, GLint height, const std::string& title);
+    MenuBase(GLint width, GLint height, std::string  title);
     virtual ~MenuBase() = default;
 
     // Core functionality
@@ -37,9 +33,9 @@ protected:
     virtual void setupButtons() {}
 
     // Helper methods
-    void renderFrame();
-    void renderTitle();
-    void renderText(const std::string& text, GLfloat x, GLfloat y, void* font = GLUT_BITMAP_HELVETICA_12);
+    void renderFrame() const;
+    void renderTitle() const;
+    static void renderText(const std::string& text, GLfloat x, GLfloat y, void* font = GLUT_BITMAP_HELVETICA_12);
     void centerMenu();
 
     // Properties

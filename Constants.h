@@ -9,11 +9,8 @@
 #define CONSTANTS_H
 
 #include <OpenGL/gl.h>
-#include <GLUT/glut.h>
 
-/******************************
-*      WINDOW CONSTANTS       *
-*******************************/
+
 namespace Window {
     constexpr GLint INIT_X = 100;
     constexpr GLint INIT_Y = 100;
@@ -22,9 +19,7 @@ namespace Window {
     constexpr GLfloat REFRESH_RATE_MS = 16.6666666666666666667f;
 }
 
-/******************************
-*      WORLD CONSTANTS        *
-*******************************/
+
 namespace World {
     constexpr GLfloat MIN_COORD = -100.0f;
     constexpr GLfloat MAX_COORD = 100.0f;
@@ -33,9 +28,7 @@ namespace World {
     constexpr GLint SKY_SPHERE_STACKS = 50;
 }
 
-/******************************
-*      CAMERA CONSTANTS       *
-*******************************/
+
 namespace Camera {
     constexpr GLint NEAR_PLANE = 1;
     constexpr GLint FAR_PLANE = 175;
@@ -56,9 +49,7 @@ namespace Camera {
     constexpr GLfloat TP_RADIUS_DIFF = 0.1f;
 }
 
-/******************************
-*       COW CONSTANTS         *
-*******************************/
+
 namespace Cow {
     // Movement
     constexpr GLfloat MOVEMENT_SPEED = 0.25f;
@@ -85,9 +76,7 @@ namespace Cow {
     constexpr GLfloat UDDER_RADIUS = 0.35f;
 }
 
-/******************************
-*       MENU CONSTANTS        *
-*******************************/
+
 namespace Menu {
     constexpr GLint TOP_HEIGHT = 30;
     constexpr GLint HELP_WIDTH = 375;
@@ -105,9 +94,7 @@ namespace Menu {
     constexpr GLint ADJUST_BTN_HEIGHT = 30;
 }
 
-/******************************
-*    LIGHTING CONSTANTS       *
-*******************************/
+
 namespace Lighting {
     constexpr GLfloat AMBIENT_ADJUSTMENT_STEP = 0.05f;
     constexpr GLfloat SUN_ANGLE_STEP = 5.0f;
@@ -116,9 +103,7 @@ namespace Lighting {
     constexpr GLfloat SUN_QUADRATIC_ATTENUATION = 0.0f;
 }
 
-/******************************
-*     OBJECT CONSTANTS        *
-*******************************/
+
 namespace Objects {
     // House
     constexpr GLfloat HOUSE_WIDTH = 5.0f;
@@ -148,9 +133,7 @@ namespace Objects {
     constexpr GLfloat WATER_TANK_WATER_LEVEL = 0.35f;
 }
 
-/******************************
-*      INPUT CONSTANTS        *
-*******************************/
+
 namespace Input {
     constexpr int ENTER_KEY = 13;
 }

@@ -4,11 +4,10 @@
 
 #include "Button.h"
 #include <algorithm>
-#include <utility>
 
-/******************************
-*        CONSTRUCTORS         *
-*******************************/
+#include "RGBColor.h"
+
+
 Button::Button(GLint x, GLint y, GLint width, GLint height, std::string  label)
     : m_x(x)
     , m_y(y)
@@ -19,9 +18,6 @@ Button::Button(GLint x, GLint y, GLint width, GLint height, std::string  label)
 {
 }
 
-/******************************
-*     PUBLIC METHODS          *
-*******************************/
 void Button::render() const
 {
     // Save current viewport
@@ -89,21 +85,17 @@ Button& Button::setEnabled(bool enabled)
 
 Button& Button::setClickHandler(ClickHandler handler)
 {
-    m_clickHandler = handler;
+    m_clickHandler = std::move(handler);
     return *this;
 }
 
-void Button::handleClick()
-{
+void Button::handleClick() const {
     if (m_enabled && m_clickHandler)
     {
         m_clickHandler();
     }
 }
 
-/******************************
-*     PRIVATE METHODS         *
-*******************************/
 void Button::renderBackground() const
 {
     // Apply transparency if disabled

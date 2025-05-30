@@ -5,10 +5,13 @@
 #ifndef COWHEAD_H
 #define COWHEAD_H
 
+#include <algorithm>
+
 #include "CowComponent.h"
 #include "Constants.h"
+#include "RGBColor.h"
 
-class CowHead : public CowComponent
+class CowHead final : public CowComponent
 {
 public:
     void render(const WcPt3D& position, GLfloat rotation) override;
@@ -24,11 +27,12 @@ public:
     GLfloat getVerticalAngle() const { return m_verticalAngle; }
 
 private:
-    void renderMainHead();
-    void renderHorns();
-    void renderEars();
-    void renderNose();
-    void renderEyes();
+    static void renderMainHead();
+    static void renderHorns();
+    static void renderEars();
+    static void renderNose();
+
+    static void renderEyes();
 
     GLfloat m_horizontalAngle{0.0f};
     GLfloat m_verticalAngle{0.0f};

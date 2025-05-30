@@ -16,27 +16,24 @@ public:
     QuadricRenderer() : m_quadric(ResourceManager::getInstance().getQuadric()) {}
 
     // Cylinder rendering
-    void cylinder(GLdouble base, GLdouble top, GLdouble height, GLint slices = 20, GLint stacks = 20)
-    {
+    void cylinder(const GLdouble base, const GLdouble top, const GLdouble height, const GLint slices = 20, const GLint stacks = 20) const {
         gluCylinder(m_quadric, base, top, height, slices, stacks);
     }
 
     // Disk rendering
-    void disk(GLdouble inner, GLdouble outer, GLint slices = 20, GLint loops = 20)
-    {
+    void disk(const GLdouble inner, const GLdouble outer, const GLint slices = 20, const GLint loops = 20) const {
         gluDisk(m_quadric, inner, outer, slices, loops);
     }
 
     // Sphere rendering
-    void sphere(GLdouble radius, GLint slices = 20, GLint stacks = 20)
-    {
+    void sphere(const GLdouble radius, const GLint slices = 20, const GLint stacks = 20) const {
         gluSphere(m_quadric, radius, slices, stacks);
     }
 
     // Configuration
-    void setNormals(GLenum normals) { gluQuadricNormals(m_quadric, normals); }
-    void setTexture(GLboolean texture) { gluQuadricTexture(m_quadric, texture); }
-    void setOrientation(GLenum orientation) { gluQuadricOrientation(m_quadric, orientation); }
+    void setNormals(const GLenum normals) const { gluQuadricNormals(m_quadric, normals); }
+    void setTexture(const GLboolean texture) const { gluQuadricTexture(m_quadric, texture); }
+    void setOrientation(const GLenum orientation) const { gluQuadricOrientation(m_quadric, orientation); }
 
 private:
     GLUquadric* m_quadric;

@@ -7,24 +7,24 @@
 
 #include "SceneObject.h"
 #include "Constants.h"
-#include <vector>
+#include "RGBColor.h"
 
 #include "WcVector3D.h"
 
-class House : public SceneObject
+class House final : public SceneObject
 {
 public:
-    House(const WcPt3D& position = WcPt3D(), GLfloat rotation = 0.0f);
+    explicit House(const WcPt3D& position = WcPt3D(), GLfloat rotation = 0.0f);
 
 protected:
     void doRender() override;
 
 private:
     void renderWalls();
-    void renderRoof();
     void renderDoor();
-    void renderWindows();
-    void renderWindow(GLfloat x, GLfloat y);
+    // void renderRoof();
+    // void renderWindows();
+    // void renderWindow(GLfloat x, GLfloat y);
 
     // Material colors
     static constexpr GLfloat WALL_COLOR[] = {RGB_COLOR_CREAM, 1.0f};

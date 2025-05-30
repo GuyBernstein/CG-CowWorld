@@ -20,14 +20,14 @@ public:
     MenuBase* getMenu(const std::string& name);
 
     // Render all visible menus
-    void renderAll();
+    void renderAll() const;
 
     // Event forwarding
-    void handleMouse(int button, int state, int x, int y);
-    void handleKeyboard(unsigned char key, int x, int y);
+    void handleMouse(int button, int state, int x, int y) const;
+    void handleKeyboard(unsigned char key, int x, int y) const;
 
     // Utility methods
-    void hideAll();
+    void hideAll() const;
     void showOnly(const std::string& name);
 
 private:

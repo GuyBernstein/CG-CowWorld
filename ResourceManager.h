@@ -9,13 +9,9 @@
 
 #include <OpenGL/gl.h>
 #include <GLUT/glut.h>
-#include <memory>
 #include <unordered_map>
 #include <string>
 
-/******************************
-*     CLASS DECLARATION       *
-*******************************/
 class ResourceManager
 {
 public:
@@ -51,6 +47,6 @@ private:
     std::unordered_map<std::string, GLuint> m_displayLists;
 
     // Helper to generate unique display list IDs
-    GLuint generateDisplayListId();
+    static GLuint generateDisplayListId();
 };
 #endif //RESOURCEMANAGER_H

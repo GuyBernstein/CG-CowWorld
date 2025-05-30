@@ -14,7 +14,7 @@ class WcVector3D :
 {
 public:
     WcVector3D() : WcPt3D(0.0, 0.0, 0.0) {}
-    WcVector3D(GLfloat x, GLfloat y, GLfloat z) : WcPt3D(x, y, z) {}
+    WcVector3D(const GLfloat x, const GLfloat y, const GLfloat z) : WcPt3D(x, y, z) {}
     void normalize()
     {
         const GLfloat size = sqrt(_x * _x + _y * _y + _z * _z);

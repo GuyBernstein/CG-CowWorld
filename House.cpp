@@ -3,7 +3,13 @@
 //
 
 #include "House.h"
-// #include "SceneObjects.h" // For getNormalVector
+#include "QuadricRenderer.h"
+
+// Static member definitions
+constexpr GLfloat House::WALL_COLOR[];
+constexpr GLfloat House::ROOF_COLOR[];
+constexpr GLfloat House::DOOR_COLOR[];
+constexpr GLfloat House::WINDOW_COLOR[];
 
 House::House(const WcPt3D& position, GLfloat rotation)
     : SceneObject(position, rotation)
@@ -13,9 +19,9 @@ House::House(const WcPt3D& position, GLfloat rotation)
 void House::doRender()
 {
     renderWalls();
-    renderRoof();
     renderDoor();
-    renderWindows();
+    // renderRoof();
+    // renderWindows();
 }
 
 void House::renderWalls()

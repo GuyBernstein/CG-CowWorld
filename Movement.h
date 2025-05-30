@@ -8,12 +8,11 @@
 
 #include "WcPt3D.h"
 #include "Constants.h"
-#include <cmath>
 
 class Movement
 {
 public:
-    Movement(const WcPt3D& initialPosition = WcPt3D());
+    explicit Movement(const WcPt3D& initialPosition = WcPt3D());
 
     // Position control
     void moveForward();
@@ -29,7 +28,7 @@ public:
     WcPt3D getForwardPosition(GLfloat distance) const;
 
 private:
-    bool isValidPosition(GLfloat x, GLfloat y) const;
+    static bool isValidPosition(GLfloat x, GLfloat y) ;
 
     WcPt3D m_position;
     GLfloat m_directionAngle{0.0f};

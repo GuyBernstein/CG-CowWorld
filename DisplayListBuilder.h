@@ -16,7 +16,7 @@ public:
     using RenderFunction = std::function<void()>;
 
     // Build or get existing display list
-    static GLuint build(const std::string& name, RenderFunction renderFunc)
+    static GLuint build(const std::string& name, const RenderFunction& renderFunc)
     {
         auto& manager = ResourceManager::getInstance();
 
@@ -25,7 +25,7 @@ public:
             return manager.getDisplayList(name);
         }
 
-        GLuint listId = manager.createDisplayList(name);
+        const GLuint listId = manager.createDisplayList(name);
 
         glNewList(listId, GL_COMPILE);
         renderFunc();
@@ -37,7 +37,7 @@ public:
     // Execute display list
     static void execute(const std::string& name)
     {
-        auto& manager = ResourceManager::getInstance();
+        const auto& manager = ResourceManager::getInstance();
         if (manager.hasDisplayList(name))
         {
             glCallList(manager.getDisplayList(name));

@@ -55,7 +55,7 @@ GLuint ResourceManager::createDisplayList(const std::string& name)
 
 GLuint ResourceManager::getDisplayList(const std::string& name) const
 {
-    auto it = m_displayLists.find(name);
+    const auto it = m_displayLists.find(name);
     return (it != m_displayLists.end()) ? it->second : 0;
 }
 

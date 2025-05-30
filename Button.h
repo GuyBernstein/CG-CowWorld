@@ -9,11 +9,8 @@
 #include <OpenGL/gl.h>
 #include <string>
 #include <functional>
-#include "RGBColor.h"
 
-/******************************
-*     CLASS DECLARATION       *
-*******************************/
+
 class Button
 {
 public:
@@ -44,7 +41,7 @@ public:
     bool isEnabled() const { return m_enabled; }
 
     // Event handling
-    void handleClick();
+    void handleClick() const;
 
 private:
     // Rendering constants

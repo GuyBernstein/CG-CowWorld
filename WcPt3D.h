@@ -6,7 +6,6 @@
 #define WCPT3D_H
 
 #include <OpenGL/gl.h>
-#include <GLUT/glut.h>
 
 /**
  * Class definition for WcPt3D.
