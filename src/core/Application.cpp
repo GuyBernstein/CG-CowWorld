@@ -56,8 +56,16 @@ namespace CowGL {
             if (s_instance) s_instance->m_input->onKeyPress(key, x, y);
         });
 
+        m_window->setKeyboardUpCallback([](unsigned char key, int x, int y) {
+            if (s_instance) s_instance->m_input->onKeyRelease(key, x, y);
+        });
+
         m_window->setMouseCallback([](int button, int state, int x, int y) {
             if (s_instance) s_instance->m_input->onMouseButton(button, state, x, y);
+        });
+
+        m_window->setMouseMoveCallback([](int x, int y) {
+            if (s_instance) s_instance->m_input->onMouseMove(x, y);
         });
 
 
@@ -104,6 +112,9 @@ namespace CowGL {
         m_renderer->renderScene(m_scene.get());
         m_uiManager->render(m_renderer.get());
         m_renderer->endFrame();
+
+        // Swap buffers after all rendering is complete
+        glutSwapBuffers();
     }
 
     void Application::handleEvents() {

@@ -46,7 +46,7 @@ namespace CowGL {
     }
 
     void Renderer::endFrame() {
-        glutSwapBuffers();
+        // Don't swap buffers here - let Application handle it after UI rendering
     }
 
     void Renderer::renderScene(Scene *scene) {
@@ -60,13 +60,13 @@ namespace CowGL {
             int height = window->getHeight();
 
             // Set viewport for main scene (accounting for UI)
-            glViewport(0, 0, width, height - 40);
+            glViewport(0, 0, width, height);
 
             // Setup projection matrix
             glMatrixMode(GL_PROJECTION);
             glLoadIdentity();
             gluPerspective(camera->getFOV(),
-                           (float) width / (float) (height - 40),
+                           (float) width / (float) height,
                            camera->getNearPlane(),
                            camera->getFarPlane());
 
@@ -96,6 +96,26 @@ namespace CowGL {
                 obj->render();
             }
         }
+    }
+
+    void Renderer::renderUI() {
+        // Save current state
+        glPushAttrib(GL_ALL_ATTRIB_BITS);
+        glMatrixMode(GL_PROJECTION);
+        glPushMatrix();
+        glMatrixMode(GL_MODELVIEW);
+        glPushMatrix();
+
+        // Disable depth test and lighting for UI
+        glDisable(GL_DEPTH_TEST);
+        glDisable(GL_LIGHTING);
+
+        // Restore state
+        glPopMatrix();
+        glMatrixMode(GL_PROJECTION);
+        glPopMatrix();
+        glMatrixMode(GL_MODELVIEW);
+        glPopAttrib();
     }
 
     void Renderer::setupLighting(Scene *scene) {

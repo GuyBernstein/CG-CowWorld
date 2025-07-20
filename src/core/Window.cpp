@@ -11,7 +11,9 @@
 namespace CowGL {
     Window::DisplayCallback Window::s_displayCallback = nullptr;
     Window::KeyboardCallback Window::s_keyboardCallback = nullptr;
+    Window::KeyboardCallback Window::s_keyboardUpCallback = nullptr;
     Window::MouseCallback Window::s_mouseCallback = nullptr;
+    Window::MouseMoveCallback Window::s_mouseMoveCallback = nullptr;
 
     Window::Window(const std::string &title, int width, int height)
         : m_width(width), m_height(height) {
@@ -23,7 +25,10 @@ namespace CowGL {
         // Set callbacks
         glutDisplayFunc(displayCallbackWrapper);
         glutKeyboardFunc(keyboardCallbackWrapper);
+        glutKeyboardUpFunc(keyboardUpCallbackWrapper);
         glutMouseFunc(mouseCallbackWrapper);
+        glutPassiveMotionFunc(mouseMoveCallbackWrapper);
+        glutMotionFunc(mouseMoveCallbackWrapper);
 
         // Enable depth testing
         glEnable(GL_DEPTH_TEST);
@@ -41,11 +46,17 @@ namespace CowGL {
         s_keyboardCallback = callback;
     }
 
+    void Window::setKeyboardUpCallback(KeyboardCallback callback) {
+        s_keyboardUpCallback = callback;
+    }
+
     void Window::setMouseCallback(MouseCallback callback) {
         s_mouseCallback = callback;
     }
 
-
+    void Window::setMouseMoveCallback(MouseMoveCallback callback) {
+        s_mouseMoveCallback = callback;
+    }
 
     void Window::swapBuffers() {
         glutSwapBuffers();
@@ -67,10 +78,21 @@ namespace CowGL {
         }
     }
 
+    void Window::keyboardUpCallbackWrapper(unsigned char key, int x, int y) {
+        if (s_keyboardUpCallback) {
+            s_keyboardUpCallback(key, x, y);
+        }
+    }
+
     void Window::mouseCallbackWrapper(int button, int state, int x, int y) {
         if (s_mouseCallback) {
             s_mouseCallback(button, state, x, y);
         }
     }
 
+    void Window::mouseMoveCallbackWrapper(int x, int y) {
+        if (s_mouseMoveCallback) {
+            s_mouseMoveCallback(x, y);
+        }
+    }
 } // namespace CowGL
