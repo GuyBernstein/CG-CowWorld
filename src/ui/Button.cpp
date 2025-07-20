@@ -30,7 +30,9 @@ namespace CowGL {
         glm::vec2 mousePos = input->getMousePosition();
         int windowHeight = window->getHeight();
 
-        // Convert mouse coordinates (y is inverted)
+        // Mouse coordinates are already in window space (0,0 is top-left)
+        // Button coordinates are in OpenGL space (0,0 is bottom-left)
+        // So we need to convert mouse Y coordinate
         int mouseY = windowHeight - mousePos.y;
 
         // Check if mouse is over button
@@ -51,11 +53,11 @@ namespace CowGL {
     void Button::render() {
         // Button background
         if (m_pressed) {
-            glColor3f(0.6f, 0.6f, 0.6f);
+            glColor3f(0.5f, 0.5f, 0.5f);
         } else if (m_hovered) {
-            glColor3f(0.8f, 0.8f, 0.8f);
+            glColor3f(0.7f, 0.7f, 0.7f);
         } else {
-            glColor3f(1.0f, 1.0f, 1.0f);
+            glColor3f(0.85f, 0.85f, 0.85f);
         }
 
         glBegin(GL_QUADS);
@@ -67,7 +69,7 @@ namespace CowGL {
 
         // Button frame
         glColor3f(0.0f, 0.0f, 0.0f);
-        glLineWidth(3.0f);
+        glLineWidth(2.0f);
         glBegin(GL_LINE_LOOP);
         glVertex2f(m_x + 1, m_y + 1);
         glVertex2f(m_x + m_width - 1, m_y + 1);
@@ -79,11 +81,11 @@ namespace CowGL {
         glColor3f(0.0f, 0.0f, 0.0f);
         int textWidth = m_label.length() * 9; // Approximate
         int textX = m_x + (m_width - textWidth) / 2;
-        int textY = m_y + 9;
+        int textY = m_y + (m_height / 2) - 5; // Center vertically
 
         glRasterPos2f(textX, textY);
         for (char c: m_label) {
-            glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, c);
+            glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, c);
         }
     }
 

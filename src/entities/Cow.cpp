@@ -1,6 +1,7 @@
 //==============================================================================
 // File: entities/Cow.cpp
 // Purpose: Cow entity implementation
+// Created by Guy Bernstein on 20/07/2025.
 //==============================================================================
 
 #include "entities/Cow.h"
@@ -28,8 +29,8 @@ namespace CowGL {
         // Angle limits
         const float HEAD_MAX_HORIZONTAL = 80.0f;
         const float HEAD_MAX_VERTICAL = 60.0f;
-        const float TAIL_MAX_HORIZONTAL = 80.0f;
-        const float TAIL_MAX_VERTICAL = 90.0f;
+        const float TAIL_MAX_HORIZONTAL = 45.0f;
+        const float TAIL_MAX_VERTICAL = 45.0f;
     }
 
     Cow::Cow(const std::string &name)
@@ -39,8 +40,10 @@ namespace CowGL {
           , m_headHorizontalAngle(0.0f)
           , m_headVerticalAngle(0.0f)
           , m_tailHorizontalAngle(0.0f)
-          , m_tailVerticalAngle(-70.0f)
-          , m_animationTime(0.0f) {
+          , m_tailVerticalAngle(-30.0f)
+          , m_animationTime(0.0f)
+          , m_eyePosition(0.0f, 0.0f, 0.0f)
+          , m_controlMode(ControlMode::Movement) {
     }
 
     void Cow::update(float deltaTime) {
@@ -49,57 +52,89 @@ namespace CowGL {
         // Handle input
         Input *input = Application::getInstance()->getInput();
 
-        // Movement
-        if (input->isKeyPressed('w')) moveForward();
-        if (input->isKeyPressed('s')) moveBackward();
-        if (input->isKeyPressed('a')) turnLeft();
-        if (input->isKeyPressed('d')) turnRight();
+        // Toggle control modes
+        if (input->isKeyJustPressed('t') || input->isKeyJustPressed('T')) {
+            m_controlMode = ControlMode::Tail;
+        } else if (input->isKeyJustPressed('h') || input->isKeyJustPressed('H')) {
+            m_controlMode = ControlMode::Head;
+        } else if (input->isKeyJustPressed('m') || input->isKeyJustPressed('M')) {
+            m_controlMode = ControlMode::Movement;
+        }
 
-        // Head control
-        if (input->isKeyPressed('i')) moveHeadUp();
-        if (input->isKeyPressed('k')) moveHeadDown();
-        if (input->isKeyPressed('j')) turnHeadLeft();
-        if (input->isKeyPressed('l')) turnHeadRight();
+        // Movement controls (always active)
+        if (input->isKeyPressed('w') || input->isKeyPressed('W')) moveForward(deltaTime);
+        if (input->isKeyPressed('s') || input->isKeyPressed('S')) moveBackward(deltaTime);
+        if (input->isKeyPressed('a') || input->isKeyPressed('A')) turnLeft(deltaTime);
+        if (input->isKeyPressed('d') || input->isKeyPressed('D')) turnRight(deltaTime);
 
-        // Reset
-        if (input->isKeyPressed('r')) {
+        // Context-sensitive controls (I,J,K,L)
+        switch (m_controlMode) {
+            case ControlMode::Head:
+                if (input->isKeyPressed('i') || input->isKeyPressed('I')) moveHeadUp(deltaTime);
+                if (input->isKeyPressed('k') || input->isKeyPressed('K')) moveHeadDown(deltaTime);
+                if (input->isKeyPressed('j') || input->isKeyPressed('J')) turnHeadLeft(deltaTime);
+                if (input->isKeyPressed('l') || input->isKeyPressed('L')) turnHeadRight(deltaTime);
+                break;
+
+            case ControlMode::Tail:
+                if (input->isKeyPressed('i') || input->isKeyPressed('I')) moveTailUp(deltaTime);
+                if (input->isKeyPressed('k') || input->isKeyPressed('K')) moveTailDown(deltaTime);
+                if (input->isKeyPressed('j') || input->isKeyPressed('J')) turnTailLeft(deltaTime);
+                if (input->isKeyPressed('l') || input->isKeyPressed('L')) turnTailRight(deltaTime);
+                break;
+
+            default:
+                break;
+        }
+
+        // Reset controls
+        if (input->isKeyPressed('r') || input->isKeyPressed('R')) {
             resetHead();
             resetTail();
         }
+
+        // Reset with numpad 5
+        if (input->isKeyPressed('5')) {
+            resetHead();
+            resetTail();
+        }
+
+        // Update eye position for first-person camera
+        m_eyePosition = m_transform.getPosition() + glm::vec3(1.1f, 0.0f, 1.3f);
     }
 
-    void Cow::moveForward() {
+    void Cow::moveForward(float deltaTime) {
         glm::vec3 forward = m_transform.getForward();
-        m_transform.translate(forward * m_moveSpeed * 0.016f);
+        m_transform.translate(forward * m_moveSpeed * deltaTime);
     }
 
-    void Cow::moveBackward() {
+    void Cow::moveBackward(float deltaTime) {
         glm::vec3 forward = m_transform.getForward();
-        m_transform.translate(forward * -m_moveSpeed * 0.016f);
+        m_transform.translate(forward * -m_moveSpeed * deltaTime);
     }
 
-    void Cow::turnLeft() {
-        m_transform.rotate(glm::vec3(0.0f, 0.0f, m_turnSpeed * 0.016f));
+    void Cow::turnLeft(float deltaTime) {
+        m_transform.rotate(glm::vec3(0.0f, 0.0f, m_turnSpeed * deltaTime));
     }
 
-    void Cow::turnRight() {
-        m_transform.rotate(glm::vec3(0.0f, 0.0f, -m_turnSpeed * 0.016f));
+    void Cow::turnRight(float deltaTime) {
+        m_transform.rotate(glm::vec3(0.0f, 0.0f, -m_turnSpeed * deltaTime));
     }
 
-    void Cow::moveHeadUp() {
-        m_headVerticalAngle = std::min(m_headVerticalAngle + HEAD_TURN_SPEED * 0.016f, HEAD_MAX_VERTICAL);
+    void Cow::moveHeadUp(float deltaTime) {
+        m_headVerticalAngle = std::min(m_headVerticalAngle + HEAD_TURN_SPEED * deltaTime, HEAD_MAX_VERTICAL);
     }
 
-    void Cow::moveHeadDown() {
-        m_headVerticalAngle = std::max(m_headVerticalAngle - HEAD_TURN_SPEED * 0.016f, -HEAD_MAX_VERTICAL);
+    void Cow::moveHeadDown(float deltaTime) {
+        m_headVerticalAngle = std::max(m_headVerticalAngle - HEAD_TURN_SPEED * deltaTime, -HEAD_MAX_VERTICAL);
     }
 
-    void Cow::turnHeadLeft() {
-        m_headHorizontalAngle = std::min(m_headHorizontalAngle + HEAD_TURN_SPEED * 0.016f, HEAD_MAX_HORIZONTAL);
+    void Cow::turnHeadLeft(float deltaTime) {
+        m_headHorizontalAngle = std::min(m_headHorizontalAngle + HEAD_TURN_SPEED * deltaTime, HEAD_MAX_HORIZONTAL);
     }
 
-    void Cow::turnHeadRight() {
-        m_headHorizontalAngle = std::max(m_headHorizontalAngle - HEAD_TURN_SPEED * 0.016f, -HEAD_MAX_HORIZONTAL);
+    void Cow::turnHeadRight(float deltaTime) {
+        m_headHorizontalAngle = std::max(m_headHorizontalAngle - HEAD_TURN_SPEED * deltaTime, -HEAD_MAX_HORIZONTAL);
     }
 
     void Cow::resetHead() {
@@ -107,29 +142,29 @@ namespace CowGL {
         m_headVerticalAngle = 0.0f;
     }
 
-    void Cow::moveTailUp() {
-        m_tailVerticalAngle = std::min(m_tailVerticalAngle + TAIL_TURN_SPEED * 0.016f, TAIL_MAX_VERTICAL);
+    void Cow::moveTailUp(float deltaTime) {
+        m_tailVerticalAngle = std::min(m_tailVerticalAngle + TAIL_TURN_SPEED * deltaTime, TAIL_MAX_VERTICAL);
     }
 
-    void Cow::moveTailDown() {
-        m_tailVerticalAngle = std::max(m_tailVerticalAngle - TAIL_TURN_SPEED * 0.016f, -TAIL_MAX_VERTICAL);
+    void Cow::moveTailDown(float deltaTime) {
+        m_tailVerticalAngle = std::max(m_tailVerticalAngle - TAIL_TURN_SPEED * deltaTime, -TAIL_MAX_VERTICAL);
     }
 
-    void Cow::turnTailLeft() {
-        m_tailHorizontalAngle = std::min(m_tailHorizontalAngle + TAIL_TURN_SPEED * 0.016f, TAIL_MAX_HORIZONTAL);
+    void Cow::turnTailLeft(float deltaTime) {
+        m_tailHorizontalAngle = std::min(m_tailHorizontalAngle + TAIL_TURN_SPEED * deltaTime, TAIL_MAX_HORIZONTAL);
     }
 
-    void Cow::turnTailRight() {
-        m_tailHorizontalAngle = std::max(m_tailHorizontalAngle - TAIL_TURN_SPEED * 0.016f, -TAIL_MAX_HORIZONTAL);
+    void Cow::turnTailRight(float deltaTime) {
+        m_tailHorizontalAngle = std::max(m_tailHorizontalAngle - TAIL_TURN_SPEED * deltaTime, -TAIL_MAX_HORIZONTAL);
     }
 
     void Cow::resetTail() {
         m_tailHorizontalAngle = 0.0f;
-        m_tailVerticalAngle = -70.0f;
+        m_tailVerticalAngle = -30.0f;
     }
 
     glm::vec3 Cow::getEyePosition() const {
-        return m_transform.getPosition() + glm::vec3(1.1f, 0.0f, 1.3f);
+        return m_eyePosition;
     }
 
     glm::vec3 Cow::getLookDirection() const {

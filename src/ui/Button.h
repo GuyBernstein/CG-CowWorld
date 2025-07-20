@@ -38,6 +38,11 @@ namespace CowGL {
 
         void setLabel(const std::string &label) { m_label = label; }
 
+        int getX() const { return m_x; }
+        int getY() const { return m_y; }
+        int getWidth() const { return m_width; }
+        int getHeight() const { return m_height; }
+
         bool isClicked(int mouseX, int mouseY) const;
 
     private:

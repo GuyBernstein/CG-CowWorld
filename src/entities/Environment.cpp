@@ -17,7 +17,7 @@ namespace CowGL {
             const GLfloat CLAY[] = {0.71f, 0.13f, 0.13f, 1.0f};
             const GLfloat BROWN[] = {0.55f, 0.27f, 0.07f, 1.0f};
             const GLfloat LIGHT_BLUE[] = {0.62f, 0.82f, 0.88f, 1.0f};
-            const GLfloat MEDIUM_GRAY[] = {0.4f, 0.4f, 0.4f, 1.0f};
+            const GLfloat MEDIUM_GRAY[] = {0.5f, 0.5f, 0.5f, 1.0f};
             const GLfloat LIGHT_GRAY[] = {0.8f, 0.8f, 0.8f, 1.0f};
             const GLfloat DARK_BROWN[] = {0.31f, 0.21f, 0.14f, 1.0f};
             const GLfloat DARK_GREEN[] = {0.1f, 0.29f, 0.11f, 1.0f};
@@ -25,6 +25,7 @@ namespace CowGL {
             const GLfloat WATER_BLUE[] = {0.11f, 0.58f, 0.88f, 1.0f};
             const GLfloat BLACK[] = {0.0f, 0.0f, 0.0f, 1.0f};
             const GLfloat WHITE[] = {1.0f, 1.0f, 1.0f, 1.0f};
+            const GLfloat METALLIC_GRAY[] = {0.7f, 0.7f, 0.75f, 1.0f};
         }
 
         // Ground
@@ -176,14 +177,73 @@ namespace CowGL {
         void Shed::onRender() {
             glEnable(GL_LIGHTING);
 
-            // Walls
-            glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, MEDIUM_GRAY);
+            // Metallic walls
+            glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, METALLIC_GRAY);
             glMaterialfv(GL_FRONT, GL_EMISSION, BLACK);
             glMaterialfv(GL_FRONT, GL_SPECULAR, WHITE);
-            glMaterialf(GL_FRONT, GL_SHININESS, 25.0f);
+            glMaterialf(GL_FRONT, GL_SHININESS, 50.0f);
 
-            // Similar rendering to House but smaller and metallic appearance
-            // Implementation abbreviated for brevity
+            // Front wall
+            glBegin(GL_QUADS);
+            glNormal3f(0.0f, -1.0f, 0.0f);
+            glVertex3f(2.0f, -2.5f, 0.0f);
+            glVertex3f(-2.0f, -2.5f, 0.0f);
+            glVertex3f(-2.0f, -2.5f, 2.5f);
+            glVertex3f(2.0f, -2.5f, 2.5f);
+            glEnd();
+
+            // Back wall
+            glBegin(GL_QUADS);
+            glNormal3f(0.0f, 1.0f, 0.0f);
+            glVertex3f(-2.0f, 2.5f, 0.0f);
+            glVertex3f(2.0f, 2.5f, 0.0f);
+            glVertex3f(2.0f, 2.5f, 2.5f);
+            glVertex3f(-2.0f, 2.5f, 2.5f);
+            glEnd();
+
+            // Right wall
+            glBegin(GL_QUADS);
+            glNormal3f(1.0f, 0.0f, 0.0f);
+            glVertex3f(2.0f, -2.5f, 0.0f);
+            glVertex3f(2.0f, 2.5f, 0.0f);
+            glVertex3f(2.0f, 2.5f, 2.5f);
+            glVertex3f(2.0f, -2.5f, 2.5f);
+            glEnd();
+
+            // Left wall
+            glBegin(GL_QUADS);
+            glNormal3f(-1.0f, 0.0f, 0.0f);
+            glVertex3f(-2.0f, -2.5f, 0.0f);
+            glVertex3f(-2.0f, 2.5f, 0.0f);
+            glVertex3f(-2.0f, 2.5f, 2.5f);
+            glVertex3f(-2.0f, -2.5f, 2.5f);
+            glEnd();
+
+            // Flat metal roof
+            glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, MEDIUM_GRAY);
+            glMaterialfv(GL_FRONT, GL_SPECULAR, WHITE);
+            glMaterialf(GL_FRONT, GL_SHININESS, 80.0f);
+
+            glBegin(GL_QUADS);
+            glNormal3f(0.0f, 0.0f, 1.0f);
+            glVertex3f(-2.2f, -2.7f, 2.5f);
+            glVertex3f(2.2f, -2.7f, 2.5f);
+            glVertex3f(2.2f, 2.7f, 2.5f);
+            glVertex3f(-2.2f, 2.7f, 2.5f);
+            glEnd();
+
+            // Shed door (metallic sliding door)
+            glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, LIGHT_GRAY);
+            glMaterialfv(GL_FRONT, GL_SPECULAR, WHITE);
+            glMaterialf(GL_FRONT, GL_SHININESS, 60.0f);
+
+            glBegin(GL_QUADS);
+            glNormal3f(1.0f, 0.0f, 0.0f);
+            glVertex3f(2.01f, 1.0f, 0.0f);
+            glVertex3f(2.01f, -1.0f, 0.0f);
+            glVertex3f(2.01f, -1.0f, 2.0f);
+            glVertex3f(2.01f, 1.0f, 2.0f);
+            glEnd();
 
             glDisable(GL_LIGHTING);
         }

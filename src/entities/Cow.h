@@ -14,6 +14,12 @@
 namespace CowGL {
     class Cow : public GameObject {
     public:
+        enum class ControlMode {
+            Movement,
+            Head,
+            Tail
+        };
+
         explicit Cow(const std::string &name = "Cow");
 
         ~Cow() override = default;
@@ -21,33 +27,33 @@ namespace CowGL {
         void update(float deltaTime) override;
 
         // Movement controls
-        void moveForward();
+        void moveForward(float deltaTime);
 
-        void moveBackward();
+        void moveBackward(float deltaTime);
 
-        void turnLeft();
+        void turnLeft(float deltaTime);
 
-        void turnRight();
+        void turnRight(float deltaTime);
 
         // Head controls
-        void moveHeadUp();
+        void moveHeadUp(float deltaTime);
 
-        void moveHeadDown();
+        void moveHeadDown(float deltaTime);
 
-        void turnHeadLeft();
+        void turnHeadLeft(float deltaTime);
 
-        void turnHeadRight();
+        void turnHeadRight(float deltaTime);
 
         void resetHead();
 
         // Tail controls
-        void moveTailUp();
+        void moveTailUp(float deltaTime);
 
-        void moveTailDown();
+        void moveTailDown(float deltaTime);
 
-        void turnTailLeft();
+        void turnTailLeft(float deltaTime);
 
-        void turnTailRight();
+        void turnTailRight(float deltaTime);
 
         void resetTail();
 
@@ -55,6 +61,8 @@ namespace CowGL {
         glm::vec3 getEyePosition() const;
 
         glm::vec3 getLookDirection() const;
+
+        const glm::vec3 &getEyePositionRef() const { return m_eyePosition; }
 
     protected:
         void onRender() override;
@@ -82,6 +90,12 @@ namespace CowGL {
 
         // Animation
         float m_animationTime;
+
+        // Camera support
+        glm::vec3 m_eyePosition;
+
+        // Control mode
+        ControlMode m_controlMode;
     };
 } // namespace CowGL
 

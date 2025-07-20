@@ -16,6 +16,7 @@ namespace CowGL {
     class GameObject;
     class Camera;
     class Light;
+    class Cow;
 
     class Scene {
     public:
@@ -45,9 +46,12 @@ namespace CowGL {
     private:
         void createDefaultScene();
 
+        void handleCameraControls(float deltaTime);
+
         std::vector<std::shared_ptr<GameObject> > m_gameObjects;
         std::vector<std::shared_ptr<Light> > m_lights;
         Camera *m_activeCamera;
+        std::shared_ptr<Cow> m_cow;
     };
 } // namespace CowGL
 

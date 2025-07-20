@@ -50,6 +50,8 @@ namespace CowGL {
 
         void renderLightingMenu();
 
+        void updateLighting();
+
         std::vector<std::shared_ptr<Button> > m_topMenuButtons;
 
         bool m_showHelpMenu;
