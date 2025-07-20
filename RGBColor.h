@@ -1,12 +1,15 @@
-//
-// Created by Guy Bernstein on 29/05/2025.
-//
+#pragma once
+/*****************************************************************//**
+ * \file   RGBColor.h
+ * \brief  Various colors.
+ * 
+ * \author aaron
+ * \date   May 2023
+ *********************************************************************/
 
-#ifndef RGBCOLOR_H
-#define RGBCOLOR_H
-
-
-
+/******************************
+*          DEFINES            *
+*******************************/
 #define RGB_COLOR_BLACK        0.0, 0.0, 0.0
 #define RGB_COLOR_WHITE        1.0, 1.0, 1.0
 #define RGB_COLOR_RED          1.0, 0.0, 0.0
@@ -17,7 +20,7 @@
 #define RGB_COLOR_MEDIUM_GRAY  0.4, 0.4, 0.4
 #define RGB_COLOR_LIGHT_GRAY   0.8, 0.8, 0.8
 #define RGB_COLOR_GRASS_GREEN  0.18, 0.55, 0.18
-#define RGB_COLOR_MEDIUM_GREEN 0.1, 0.45, 0.1
+#define RGB_COLOR_MEDIUM_GREEN 0.1, 0.45, 0.1 
 #define RGB_COLOR_FOREST_GREEN 0.13, 0.55, 0.13
 #define RGB_COLOR_DARK_GREEN   0.1, 0.29, 0.11
 #define RGB_COLOR_LIGHT_BROWN  0.8, 0.52, 0.25
@@ -32,4 +35,3 @@
 #define RGB_COLOR_COW_BROWN    0.42, 0.18, 0.12
 #define RGB_COLOR_IVORY        1.0, 1.0, 0.94
 #define RGB_COLOR_WALNUT       0.26, 0.15, 0.06
-#endif //RGBCOLOR_H

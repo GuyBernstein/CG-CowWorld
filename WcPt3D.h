@@ -1,10 +1,16 @@
-//
-// Created by Guy Bernstein on 29/05/2025.
-//
+#pragma once
+/*****************************************************************//**
+ * \file   WcPt3D.h
+ * \brief  Class WcPt3D declaration and definition.
+ * 
+ * \author aaron
+ * \date   May 2023
+ *********************************************************************/
 
-#ifndef WCPT3D_H
-#define WCPT3D_H
-
+/******************************
+*          INCLUDES           *
+*******************************/
+#include <GLUT/glut.h>
 #include <OpenGL/gl.h>
 
 /**
@@ -28,4 +34,3 @@ public:
 protected:
     GLfloat _x, _y, _z;
 };
-#endif //WCPT3D_H

@@ -1,68 +1,39 @@
-//
-// Created by Guy Bernstein on 29/05/2025.
-// Button class
+#pragma once
+/*****************************************************************//**
+ * \file   Button.h
+ * \brief  Class Button declaration.
+ * 
+ * \author aaron
+ * \date   May 2023
+ *********************************************************************/
 
-#ifndef BUTTON_H
-#define BUTTON_H
-
+/******************************
+*          INCLUDES           *
+*******************************/
 #include <GLUT/glut.h>
 #include <OpenGL/gl.h>
 #include <string>
-#include <functional>
+#include "RGBColor.h"
 
-
+/******************************
+*     CLASS DECLARATIONS      *
+*******************************/
 class Button
 {
 public:
-    // Type aliases for clarity
-    using ClickHandler = std::function<void()>;
+    Button();
+    Button(GLint x, GLint y, GLint w, GLint h, std::string label);
 
-    // Constructors
-    Button() = default;
-    Button(GLint x, GLint y, GLint width, GLint height, std::string  label);
-
-    // Core functionality
     void render() const;
-    bool isClicked(GLint x, GLint y) const;
+    bool clicked(GLint x, GLint y) const;
 
-    // Property setters with chaining support
-    Button& setPosition(GLint x, GLint y);
-    Button& setSize(GLint width, GLint height);
-    Button& setLabel(const std::string& label);
-    Button& setEnabled(bool enabled);
-    Button& setClickHandler(ClickHandler handler);
-
-    // Property getters
-    GLint getX() const { return m_x; }
-    GLint getY() const { return m_y; }
-    GLint getWidth() const { return m_width; }
-    GLint getHeight() const { return m_height; }
-    const std::string& getLabel() const { return m_label; }
-    bool isEnabled() const { return m_enabled; }
-
-    // Event handling
-    void handleClick() const;
+    void setPosition(GLint x, GLint y);
+    void setWidth(GLint w);
+    void setHeight(GLint h);
 
 private:
-    // Rendering constants
-    static constexpr GLfloat FRAME_WIDTH = 3.0f;
-    static constexpr GLfloat LABEL_MARGIN_X = 6.0f;
-    static constexpr GLfloat LABEL_MARGIN_Y = 9.0f;
-    static constexpr GLfloat DISABLED_ALPHA = 0.5f;
-
-    // Member variables with modern naming convention
-    GLint m_x{0};
-    GLint m_y{0};
-    GLint m_width{0};
-    GLint m_height{0};
-    std::string m_label;
-    bool m_enabled{true};
-    ClickHandler m_clickHandler;
-
-    // Helper methods
-    void renderBackground() const;
-    void renderFrame() const;
-    void renderLabel() const;
+    GLint _x, _y;   // Pixel position
+    GLint _width;   // Pixel width
+    GLint _height;  // Pixel Height
+    std::string _label;
 };
-
-#endif //BUTTON_H

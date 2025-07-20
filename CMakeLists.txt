@@ -1,42 +1,25 @@
 cmake_minimum_required(VERSION 3.30)
-project(maman16)
+project(CG-CowGL)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(maman16
-        main.cpp
-        Constants.h
-        Button.h
-        Button.cpp
-        House.cpp
-        House.h
-        SceneObject.cpp
-        SceneObject.h
-        MenuBase.cpp
-        MenuBase.h
-        HelpMenu.cpp
-        HelpMenu.h
-        MenuManager.h
-        CowComponent.h
-        CowHead.h
-        Movement.h
-        CowController.h
-        Movement.cpp
-        ResourceManager.h
-        QuadricRenderer.h
-        DisplayListBuilder.h
-        ResourceManager.cpp
-        SceneManager.h
-        WcPt3D.h
+add_executable(CG-CowGL
+        Main.cpp
+        Cow.cpp
+        Cow.h
+        MainScene.cpp
+        Menus.cpp
+        Menus.h
         RGBColor.h
+        SceneObjects.h
+        SceneObjects.cpp
+        WcPt3D.h
         WcVector3D.h
-        MenuManager.cpp
-        CowController.cpp
-        CowHead.cpp
-        SceneManager.cpp
+        Button.cpp
+        Button.h
 )
 
-target_link_libraries(maman16
+target_link_libraries(CG-CowGL
         "-framework OpenGL"
         "-framework GLUT"
 )

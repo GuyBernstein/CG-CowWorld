@@ -1,11 +1,15 @@
-//
-// Created by Guy Bernstein on 29/05/2025.
-//
+#pragma once
+/*****************************************************************//**
+ * \file   WcVector3D.h
+ * \brief  Class WcVector3D declaration and definition.
+ * 
+ * \author aaron
+ * \date   June 2023
+ *********************************************************************/
 
-#ifndef WCVECTOR3D_H
-#define WCVECTOR3D_H
-
-
+/******************************
+*          INCLUDES           *
+*******************************/
 #include <cmath>
 #include "WcPt3D.h"
 
@@ -14,7 +18,7 @@ class WcVector3D :
 {
 public:
     WcVector3D() : WcPt3D(0.0, 0.0, 0.0) {}
-    WcVector3D(const GLfloat x, const GLfloat y, const GLfloat z) : WcPt3D(x, y, z) {}
+    WcVector3D(GLfloat x, GLfloat y, GLfloat z) : WcPt3D(x, y, z) {}
     void normalize()
     {
         const GLfloat size = sqrt(_x * _x + _y * _y + _z * _z);
@@ -24,4 +28,3 @@ public:
     }
 };
 
-#endif //WCVECTOR3D_H

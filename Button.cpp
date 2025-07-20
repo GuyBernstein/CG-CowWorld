@@ -1,145 +1,100 @@
-//
-// Created by Guy Bernstein on 29/05/2025.
-//
+/*****************************************************************//**
+ * \file   Button.cpp
+ * \brief  Class Button definition.
+ * 
+ * \author aaron
+ * \date   May 2023
+ *********************************************************************/
 
+/******************************
+*          INCLUDES           *
+*******************************/
 #include "Button.h"
-#include <algorithm>
 
-#include "RGBColor.h"
-
-
-Button::Button(GLint x, GLint y, GLint width, GLint height, std::string  label)
-    : m_x(x)
-    , m_y(y)
-    , m_width(width)
-    , m_height(height)
-    , m_label(std::move(label))
-    , m_enabled(true)
+/******************************
+*          METHODS            *
+*******************************/
+Button::Button() :
+    _x(0),
+    _y(0),
+    _width(0),
+    _height(0),
+    _label("")
 {
 }
+
+
+Button::Button(GLint x, GLint y, GLint w, GLint h, std::string label) :
+    _x(x),
+    _y(y),
+    _width(w),
+    _height(h),
+    _label(label)
+{
+}
+
 
 void Button::render() const
 {
-    // Save current viewport
-    GLint oldViewport[4];
-    glGetIntegerv(GL_VIEWPORT, oldViewport);
+    static const GLfloat FRAME_WIDTH = 3.0;
+    static const GLfloat LABEL_MARGIN_LEFT = 6.0;
+    static const GLfloat LABEL_MARGIN_BOTTOM = 9.0;
 
-    // Set button viewport
-    glViewport(m_x, m_y, m_width, m_height);
+    /* Create viewport for button */
+    glViewport(_x, _y, _width, _height);
 
-    // Save and setup matrices
     glMatrixMode(GL_MODELVIEW);
-    glPushMatrix();
     glLoadIdentity();
 
     glMatrixMode(GL_PROJECTION);
-    glPushMatrix();
     glLoadIdentity();
-    gluOrtho2D(0.0, m_width, 0.0, m_height);
 
-    // Render button components
-    renderBackground();
-    renderFrame();
-    renderLabel();
+    gluOrtho2D(0.0, _width, 0.0, _height);
 
-    // Restore matrices and viewport
-    glPopMatrix();
-    glMatrixMode(GL_MODELVIEW);
-    glPopMatrix();
+    /* Add background color */
+    glColor3f(RGB_COLOR_WHITE);
+    glRectf(0.0, 0.0, _width, _height);
 
-    glViewport(oldViewport[0], oldViewport[1], oldViewport[2], oldViewport[3]);
-}
-
-bool Button::isClicked(GLint x, GLint y) const
-{
-    return m_enabled &&
-           x >= m_x && x <= (m_x + m_width) &&
-           y >= m_y && y <= (m_y + m_height);
-}
-
-Button& Button::setPosition(GLint x, GLint y)
-{
-    m_x = x;
-    m_y = y;
-    return *this;
-}
-
-Button& Button::setSize(GLint width, GLint height)
-{
-    m_width = std::max(0, width);
-    m_height = std::max(0, height);
-    return *this;
-}
-
-Button& Button::setLabel(const std::string& label)
-{
-    m_label = label;
-    return *this;
-}
-
-Button& Button::setEnabled(bool enabled)
-{
-    m_enabled = enabled;
-    return *this;
-}
-
-Button& Button::setClickHandler(ClickHandler handler)
-{
-    m_clickHandler = std::move(handler);
-    return *this;
-}
-
-void Button::handleClick() const {
-    if (m_enabled && m_clickHandler)
-    {
-        m_clickHandler();
-    }
-}
-
-void Button::renderBackground() const
-{
-    // Apply transparency if disabled
-    if (!m_enabled)
-    {
-        glEnable(GL_BLEND);
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-        glColor4f(RGB_COLOR_WHITE, DISABLED_ALPHA);
-    }
-    else
-    {
-        glColor3f(RGB_COLOR_WHITE);
-    }
-
-    glRectf(0.0f, 0.0f, static_cast<GLfloat>(m_width), static_cast<GLfloat>(m_height));
-
-    if (!m_enabled)
-    {
-        glDisable(GL_BLEND);
-    }
-}
-
-void Button::renderFrame() const
-{
-    glColor3f(m_enabled ? 0.0f : 0.5f, m_enabled ? 0.0f : 0.5f, m_enabled ? 0.0f : 0.5f);
+    /* Add frame */
+    glColor3f(RGB_COLOR_BLACK);
     glLineWidth(FRAME_WIDTH);
-
     glBegin(GL_LINE_LOOP);
-    glVertex2f(1.0f, 1.0f);
-    glVertex2f(static_cast<GLfloat>(m_width), 1.0f);
-    glVertex2f(static_cast<GLfloat>(m_width), static_cast<GLfloat>(m_height));
-    glVertex2f(1.0f, static_cast<GLfloat>(m_height));
+    glVertex2f(1.0, 1.0);
+    glVertex2f(_width, 1.0);
+    glVertex2f(_width, _height);
+    glVertex2f(1.0, _height);
     glEnd();
-}
 
-void Button::renderLabel() const
-{
-    if (m_label.empty()) return;
-
-    glColor3f(m_enabled ? 0.0f : 0.5f, m_enabled ? 0.0f : 0.5f, m_enabled ? 0.0f : 0.5f);
-    glRasterPos2f(LABEL_MARGIN_X, LABEL_MARGIN_Y);
-
-    for (char c : m_label)
+    /* Add label */
+    glRasterPos2f(LABEL_MARGIN_LEFT, LABEL_MARGIN_BOTTOM);
+    for (const char& c : _label)
     {
         glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, c);
     }
+}
+
+
+bool Button::clicked(GLint x, GLint y) const
+{
+    return (_x <= x) && (x <= (_x + _width)) && 
+           (_y <= y) && (y <= (_y + _height));
+}
+
+
+void Button::setPosition(GLint x, GLint y)
+{
+    _x = x;
+    _y = y;
+}
+
+
+void Button::setWidth(GLint w)
+{
+    _width = w;
+}
+
+
+void Button::setHeight(GLint h)
+{
+    _height = h;
 }
