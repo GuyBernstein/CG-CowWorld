@@ -39,6 +39,7 @@ namespace CowGL {
         Renderer *getRenderer() const { return m_renderer.get(); }
         Scene *getScene() const { return m_scene.get(); }
         Input *getInput() const { return m_input.get(); }
+        UIManager *getUIManager() const { return m_uiManager.get(); }
 
     private:
         void initialize(int argc, char **argv);

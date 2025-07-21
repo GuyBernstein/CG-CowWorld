@@ -60,27 +60,21 @@ namespace CowGL {
         if (m_showLightingMenu) {
             if (input->isKeyPressed('+') || input->isKeyPressed('=')) {
                 m_globalAmbient = std::min(1.0f, m_globalAmbient + 0.01f);
-                updateLighting();
             }
             if (input->isKeyPressed('-') || input->isKeyPressed('_')) {
                 m_globalAmbient = std::max(0.0f, m_globalAmbient - 0.01f);
-                updateLighting();
             }
             if (input->isKeyPressed('[')) {
                 m_sunIntensity = std::max(0.0f, m_sunIntensity - 0.01f);
-                updateLighting();
             }
             if (input->isKeyPressed(']')) {
                 m_sunIntensity = std::min(2.0f, m_sunIntensity + 0.01f);
-                updateLighting();
             }
             if (input->isKeyPressed('<') || input->isKeyPressed(',')) {
                 m_sunAngle = std::max(-90.0f, m_sunAngle - 1.0f);
-                updateLighting();
             }
             if (input->isKeyPressed('>') || input->isKeyPressed('.')) {
                 m_sunAngle = std::min(90.0f, m_sunAngle + 1.0f);
-                updateLighting();
             }
         }
 
@@ -347,20 +341,6 @@ namespace CowGL {
         for (const char *c = footer; *c != '\0'; c++) {
             glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, *c);
         }
-    }
-
-    void UIManager::updateLighting() {
-        // Update global ambient
-        GLfloat globalAmbient[] = {m_globalAmbient, m_globalAmbient, m_globalAmbient, 1.0f};
-        glLightModelfv(GL_LIGHT_MODEL_AMBIENT, globalAmbient);
-
-        // Update sun light
-        float angleRad = glm::radians(m_sunAngle);
-        GLfloat lightPosition[] = {50.0f * std::cos(angleRad), 50.0f * std::sin(angleRad), 100.0f, 0.0f};
-        GLfloat lightDiffuse[] = {m_sunIntensity, m_sunIntensity, m_sunIntensity, 1.0f};
-
-        glLightfv(GL_LIGHT0, GL_POSITION, lightPosition);
-        glLightfv(GL_LIGHT0, GL_DIFFUSE, lightDiffuse);
     }
 
     void UIManager::showHelpMenu() {

@@ -43,6 +43,12 @@ namespace CowGL {
 
         void updateButtonPositions();
 
+        float getGlobalAmbient() const { return m_globalAmbient; }
+
+        float getSunIntensity() const { return m_sunIntensity; }
+
+        float getSunAngle() const { return m_sunAngle; }
+
     private:
         void createTopMenu();
 
@@ -51,8 +57,6 @@ namespace CowGL {
         void renderHelpMenu();
 
         void renderLightingMenu();
-
-        void updateLighting();
 
         std::vector<std::shared_ptr<Button> > m_topMenuButtons;
 

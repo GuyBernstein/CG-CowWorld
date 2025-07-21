@@ -14,6 +14,8 @@
 #include <OpenGL/gl.h>
 #include <GLUT/glut.h>
 
+#include "ui/UIManager.h"
+
 namespace CowGL {
     Renderer::Renderer() {
         // Renderer will be initialized after OpenGL context is created
@@ -118,14 +120,23 @@ namespace CowGL {
     }
 
     void Renderer::setupLighting(Scene *scene) {
+        // Get lighting values from UIManager
+        auto app = Application::getInstance();
+        auto uiManager = app->getUIManager();
+
+        float globalAmbientValue = uiManager ? uiManager->getGlobalAmbient() : 0.3f;
+        float sunIntensityValue = uiManager ? uiManager->getSunIntensity() : 1.0f;
+        float sunAngleValue = uiManager ? uiManager->getSunAngle() : 45.0f;
+
         // Setup global ambient light
-        GLfloat globalAmbient[] = {0.3f, 0.3f, 0.3f, 1.0f};
+        GLfloat globalAmbient[] = {globalAmbientValue, globalAmbientValue, globalAmbientValue, 1.0f};
         glLightModelfv(GL_LIGHT_MODEL_AMBIENT, globalAmbient);
 
         // Setup sun light (directional light)
-        GLfloat lightPosition[] = {50.0f, 50.0f, 100.0f, 0.0f};
+        float angleRad = glm::radians(sunAngleValue);
+        GLfloat lightPosition[] = {50.0f * std::cos(angleRad), 50.0f * std::sin(angleRad), 100.0f, 0.0f};
         GLfloat lightAmbient[] = {0.2f, 0.2f, 0.2f, 1.0f};
-        GLfloat lightDiffuse[] = {1.0f, 1.0f, 1.0f, 1.0f};
+        GLfloat lightDiffuse[] = {sunIntensityValue, sunIntensityValue, sunIntensityValue, 1.0f};
         GLfloat lightSpecular[] = {1.0f, 1.0f, 1.0f, 1.0f};
 
         glLightfv(GL_LIGHT0, GL_POSITION, lightPosition);
