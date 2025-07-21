@@ -235,7 +235,6 @@ namespace CowGL {
         }
 
         const char *helpText[] = {
-            "*** MAKE SURE KEYBOARD LANGUAGE IS ENGLISH ***",
             "Cow Movement: W,A,S,D keys",
             "Control Modes:",
             "  M - Movement mode (default)",
@@ -245,12 +244,10 @@ namespace CowGL {
             "Toggle Camera View: V key",
             "Reset Head/Tail: R key",
             "Quit: Q key",
-            "",
             "Camera controls (third person):",
             "  Numpad 8,2,4,6 - Rotate camera",
             "  Numpad 1,7 - Zoom in/out",
             "  Numpad 5 - Reset camera",
-            "",
             "Press ENTER to close this window"
         };
 

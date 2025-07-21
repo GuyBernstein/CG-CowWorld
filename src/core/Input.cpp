@@ -9,13 +9,15 @@
 
 namespace CowGL {
     void Input::update() {
-        // Clear just pressed states
-        m_keyJustPressed.clear();
-        m_mouseButtonJustPressed.fill(false);
-
         // Update mouse delta
         m_mouseDelta = m_mousePosition - m_lastMousePosition;
         m_lastMousePosition = m_mousePosition;
+    }
+
+    void Input::clearFrameStates() {
+        // Clear just pressed states
+        m_keyJustPressed.clear();
+        m_mouseButtonJustPressed.fill(false);
     }
 
     void Input::onKeyPress(unsigned char key, int x, int y) {

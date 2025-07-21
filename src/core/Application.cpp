@@ -107,6 +107,9 @@ namespace CowGL {
         m_input->update();
         m_scene->update(deltaTime);
         m_uiManager->update(deltaTime);
+
+        // Clear input states after all systems have had a chance to read them
+        m_input->clearFrameStates();
     }
 
     void Application::render() {

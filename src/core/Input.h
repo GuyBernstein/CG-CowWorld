@@ -56,6 +56,8 @@ namespace CowGL {
         glm::vec2 getMousePosition() const { return m_mousePosition; }
         glm::vec2 getMouseDelta() const { return m_mouseDelta; }
 
+        void clearFrameStates();
+
     private:
         std::unordered_map<unsigned char, bool> m_keyStates;
         std::unordered_map<unsigned char, bool> m_keyJustPressed;
