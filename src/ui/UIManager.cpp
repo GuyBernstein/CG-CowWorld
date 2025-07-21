@@ -59,22 +59,22 @@ namespace CowGL {
         // Handle lighting adjustments when menu is open
         if (m_showLightingMenu) {
             if (input->isKeyPressed('+') || input->isKeyPressed('=')) {
-                m_globalAmbient = std::min(1.0f, m_globalAmbient + 0.01f);
+                m_globalAmbient = std::min(1.0f, m_globalAmbient + 0.02f);
             }
             if (input->isKeyPressed('-') || input->isKeyPressed('_')) {
-                m_globalAmbient = std::max(0.0f, m_globalAmbient - 0.01f);
+                m_globalAmbient = std::max(0.0f, m_globalAmbient - 0.02f);
             }
             if (input->isKeyPressed('[')) {
-                m_sunIntensity = std::max(0.0f, m_sunIntensity - 0.01f);
+                m_sunIntensity = std::max(0.0f, m_sunIntensity - 0.02f);
             }
             if (input->isKeyPressed(']')) {
-                m_sunIntensity = std::min(2.0f, m_sunIntensity + 0.01f);
+                m_sunIntensity = std::min(2.0f, m_sunIntensity + 0.02f);
             }
             if (input->isKeyPressed('<') || input->isKeyPressed(',')) {
-                m_sunAngle = std::max(-90.0f, m_sunAngle - 1.0f);
+                m_sunAngle = std::max(-90.0f, m_sunAngle - 2.0f);
             }
             if (input->isKeyPressed('>') || input->isKeyPressed('.')) {
-                m_sunAngle = std::min(90.0f, m_sunAngle + 1.0f);
+                m_sunAngle = std::min(90.0f, m_sunAngle + 2.0f);
             }
         }
 

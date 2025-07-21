@@ -146,17 +146,59 @@ namespace CowGL {
     }
 
     void Renderer::renderSkybox() {
-        // Simple sky sphere
+        // Get current lighting values
+        auto app = Application::getInstance();
+        auto uiManager = app->getUIManager();
+        float globalAmbientValue = uiManager ? uiManager->getGlobalAmbient() : 0.3f;
+        float sunIntensityValue = uiManager ? uiManager->getSunIntensity() : 1.0f;
+        float sunAngleValue = uiManager ? uiManager->getSunAngle() : 45.0f;
+
         glPushMatrix();
 
-        GLfloat skyColor[] = {0.529f, 0.808f, 0.922f, 1.0f};
+        // Calculate sky color based on sun intensity and ambient light
+        // Base sky color
+        float baseR = 0.529f, baseG = 0.808f, baseB = 0.922f;
+
+        // Modulate sky color by sun intensity and ambient
+        float lightingFactor = (globalAmbientValue + sunIntensityValue) * 0.5f;
+        lightingFactor = CowGL::clamp(lightingFactor, 0.1f, 1.0f);
+
+        // Create a gradient effect based on sun angle
+        float sunHeight = std::sin(glm::radians(sunAngleValue));
+        float skyBrightness = 0.3f + 0.7f * std::max(0.0f, sunHeight);
+
+        GLfloat skyColor[] = {
+            baseR * lightingFactor * skyBrightness,
+            baseG * lightingFactor * skyBrightness,
+            baseB * lightingFactor * skyBrightness,
+            1.0f
+        };
+
+        // Remove emission - let the sky be affected by lighting
         glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, skyColor);
-        glMaterialfv(GL_FRONT, GL_EMISSION, skyColor);
+        GLfloat noEmission[] = {0.0f, 0.0f, 0.0f, 1.0f};
+        glMaterialfv(GL_FRONT, GL_EMISSION, noEmission);
+
+        // Add slight specular for sun reflection effect
+        GLfloat skySpecular[] = {0.2f, 0.2f, 0.2f, 1.0f};
+        glMaterialfv(GL_FRONT, GL_SPECULAR, skySpecular);
+        glMaterialf(GL_FRONT, GL_SHININESS, 10.0f);
 
         glutSolidSphere(200.0, 50, 50);
 
-        GLfloat black[] = {0.0f, 0.0f, 0.0f, 1.0f};
-        glMaterialfv(GL_FRONT, GL_EMISSION, black);
+        // Add a visible sun indicator
+        glPushMatrix();
+        float angleRad = glm::radians(sunAngleValue);
+        glTranslatef(50.0f * std::cos(angleRad), 50.0f * std::sin(angleRad), 100.0f);
+
+        // Sun sphere with emission
+        GLfloat sunEmission[] = {sunIntensityValue, sunIntensityValue * 0.9f, sunIntensityValue * 0.7f, 1.0f};
+        GLfloat sunColor[] = {1.0f, 0.95f, 0.8f, 1.0f};
+        glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, sunColor);
+        glMaterialfv(GL_FRONT, GL_EMISSION, sunEmission);
+
+        glutSolidSphere(5.0, 20, 20);
+        glPopMatrix();
 
         glPopMatrix();
     }
@@ -173,7 +215,7 @@ namespace CowGL {
     void Renderer::setupViewport(int windowWidth, int windowHeight) {
         // Calculate viewport to maintain 4:3 aspect ratio
         float targetAspect = 4.0f / 3.0f;
-        float windowAspect = (float)windowWidth / (float)windowHeight;
+        float windowAspect = (float) windowWidth / (float) windowHeight;
 
         int viewportWidth, viewportHeight;
         int viewportX = 0, viewportY = 0;
@@ -181,12 +223,12 @@ namespace CowGL {
         if (windowAspect > targetAspect) {
             // Window is wider - add black bars on sides
             viewportHeight = windowHeight;
-            viewportWidth = (int)(windowHeight * targetAspect);
+            viewportWidth = (int) (windowHeight * targetAspect);
             viewportX = (windowWidth - viewportWidth) / 2;
         } else {
             // Window is taller - add black bars on top/bottom
             viewportWidth = windowWidth;
-            viewportHeight = (int)(windowWidth / targetAspect);
+            viewportHeight = (int) (windowWidth / targetAspect);
             viewportY = (windowHeight - viewportHeight) / 2;
         }
 

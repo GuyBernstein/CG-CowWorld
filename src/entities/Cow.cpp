@@ -216,12 +216,13 @@ namespace CowGL {
         glTranslatef(-0.7f, 0.0f, 1.0f);
         glRotatef(90.0f, 0.0f, 1.0f, 0.0f);
         glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, COW_BROWN);
+
+        // Add specular highlight to make lighting more visible
+        GLfloat cowSpecular[] = {0.3f, 0.3f, 0.3f, 1.0f};
+        glMaterialfv(GL_FRONT, GL_SPECULAR, cowSpecular);
+        glMaterialf(GL_FRONT, GL_SHININESS, 20.0f);
+
         gluCylinder(quadric, 0.5f, 0.5f, 1.4f, 20, 20);
-        glRotatef(180.0f, 1.0f, 0.0f, 0.0f);
-        gluDisk(quadric, 0.0f, 0.5f, 20, 20);
-        glTranslatef(0.0f, 0.0f, -1.4f);
-        glutSolidSphere(0.5f, 20, 20);
-        glPopMatrix();
 
         // Udder
         glPushMatrix();

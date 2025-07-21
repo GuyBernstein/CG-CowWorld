@@ -8,6 +8,9 @@
 #include <GLUT/glut.h>
 #include <OpenGL/gl.h>
 
+#include "core/Application.h"
+#include "ui/UIManager.h"
+
 namespace CowGL {
     namespace Environment {
         namespace {
@@ -35,9 +38,27 @@ namespace CowGL {
         void Ground::onRender() {
             glEnable(GL_LIGHTING);
 
-            glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, GRASS_GREEN);
+            // Get lighting values for ground color variation
+            auto app = Application::getInstance();
+            auto uiManager = app->getUIManager();
+            float globalAmbientValue = uiManager ? uiManager->getGlobalAmbient() : 0.3f;
+
+            // Vary grass color slightly based on ambient light
+            float grassIntensity = 0.7f + 0.3f * globalAmbientValue;
+            GLfloat dynamicGrassGreen[] = {
+                0.18f * grassIntensity,
+                0.55f * grassIntensity,
+                0.18f * grassIntensity,
+                1.0f
+            };
+
+            glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, dynamicGrassGreen);
             glMaterialfv(GL_FRONT, GL_EMISSION, BLACK);
-            glMaterialfv(GL_FRONT, GL_SPECULAR, BLACK);
+
+            // Add specular to make sun angle changes visible
+            GLfloat groundSpecular[] = {0.1f, 0.1f, 0.1f, 1.0f};
+            glMaterialfv(GL_FRONT, GL_SPECULAR, groundSpecular);
+            glMaterialf(GL_FRONT, GL_SHININESS, 5.0f);
 
             glBegin(GL_QUADS);
             glNormal3f(0.0f, 0.0f, 1.0f);
@@ -177,11 +198,24 @@ namespace CowGL {
         void Shed::onRender() {
             glEnable(GL_LIGHTING);
 
-            // Metallic walls
+            // Get current sun intensity for dynamic metallic reflection
+            auto app = Application::getInstance();
+            auto uiManager = app->getUIManager();
+            float sunIntensity = uiManager ? uiManager->getSunIntensity() : 1.0f;
+
+            // Metallic walls with dynamic properties
             glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, METALLIC_GRAY);
             glMaterialfv(GL_FRONT, GL_EMISSION, BLACK);
-            glMaterialfv(GL_FRONT, GL_SPECULAR, WHITE);
-            glMaterialf(GL_FRONT, GL_SHININESS, 50.0f);
+
+            // Strong specular reflection that varies with sun intensity
+            GLfloat dynamicSpecular[] = {
+                0.8f * sunIntensity,
+                0.8f * sunIntensity,
+                0.8f * sunIntensity,
+                1.0f
+            };
+            glMaterialfv(GL_FRONT, GL_SPECULAR, dynamicSpecular);
+            glMaterialf(GL_FRONT, GL_SHININESS, 90.0f); // Very shiny metal
 
             // Front wall
             glBegin(GL_QUADS);
@@ -221,8 +255,9 @@ namespace CowGL {
 
             // Flat metal roof
             glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, MEDIUM_GRAY);
-            glMaterialfv(GL_FRONT, GL_SPECULAR, WHITE);
-            glMaterialf(GL_FRONT, GL_SHININESS, 80.0f);
+            GLfloat roofSpecular[] = {1.0f, 1.0f, 1.0f, 1.0f};  // Maximum specular
+            glMaterialfv(GL_FRONT, GL_SPECULAR, roofSpecular);
+            glMaterialf(GL_FRONT, GL_SHININESS, 128.0f);  // Mirror-like
 
             glBegin(GL_QUADS);
             glNormal3f(0.0f, 0.0f, 1.0f);
@@ -249,7 +284,8 @@ namespace CowGL {
         }
 
         // Tree
-        Tree::Tree() : GameObject("Tree") {
+        Tree::Tree()
+            : GameObject("Tree") {
         }
 
         void Tree::onRender() {
@@ -292,7 +328,8 @@ namespace CowGL {
         }
 
         // WaterTank
-        WaterTank::WaterTank() : GameObject("WaterTank") {
+        WaterTank::WaterTank()
+            : GameObject("WaterTank") {
         }
 
         void WaterTank::onRender() {
