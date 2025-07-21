@@ -10,6 +10,8 @@
 #include <GLUT/glut.h>
 #include <OpenGL/gl.h>
 
+#include "graphics/Camera.h"
+
 namespace CowGL {
     namespace {
         // Colors
@@ -188,6 +190,14 @@ namespace CowGL {
     }
 
     void Cow::onRender() {
+        // Don't render the cow in first-person view
+        auto scene = Application::getInstance()->getScene();
+        Camera* camera = scene->getActiveCamera();
+        if (camera && camera->getMode() == Camera::Mode::FirstPerson) {
+            // Skip rendering the cow when in first-person mode
+            return;
+        }
+
         glEnable(GL_LIGHTING);
 
         renderBody();
@@ -195,6 +205,7 @@ namespace CowGL {
         renderTail();
 
         glDisable(GL_LIGHTING);
+
     }
 
     void Cow::renderBody() {
