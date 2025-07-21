@@ -68,6 +68,14 @@ namespace CowGL {
             if (s_instance) s_instance->m_input->onMouseMove(x, y);
         });
 
+        m_window->setReshapeCallback([](int width, int height) {
+            if (s_instance) {
+                s_instance->m_window->setWidth(width);
+                s_instance->m_window->setHeight(height);
+                // Update button positions
+                s_instance->m_uiManager->updateButtonPositions();
+            }
+        });
 
         m_lastFrameTime = std::chrono::steady_clock::now();
     }

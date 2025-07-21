@@ -14,6 +14,8 @@ namespace CowGL {
     Window::KeyboardCallback Window::s_keyboardUpCallback = nullptr;
     Window::MouseCallback Window::s_mouseCallback = nullptr;
     Window::MouseMoveCallback Window::s_mouseMoveCallback = nullptr;
+    Window::ReshapeCallback Window::s_reshapeCallback = nullptr;
+
 
     Window::Window(const std::string &title, int width, int height)
         : m_width(width), m_height(height) {
@@ -36,6 +38,17 @@ namespace CowGL {
 
         // Set clear color
         glClearColor(0.529f, 0.808f, 0.922f, 1.0f); // Sky blue
+        glutReshapeFunc(reshapeCallbackWrapper);
+    }
+
+    void Window::reshapeCallbackWrapper(int width, int height) {
+        if (s_reshapeCallback) {
+            s_reshapeCallback(width, height);
+        }
+    }
+
+    void Window::setReshapeCallback(ReshapeCallback callback) {
+        s_reshapeCallback = callback;
     }
 
     void Window::setDisplayCallback(DisplayCallback callback) {

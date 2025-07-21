@@ -47,6 +47,21 @@ namespace CowGL {
     }
 
     void Cow::update(float deltaTime) {
+        // Move eye position update to BEFORE input handling
+        glm::vec3 headOffset(1.1f, 0.0f, 1.3f);
+
+        // Apply head rotation to eye position
+        float headYaw = glm::radians(m_headHorizontalAngle);
+        float headPitch = glm::radians(m_headVerticalAngle);
+
+        glm::vec3 rotatedOffset(
+            headOffset.x * std::cos(headYaw) - headOffset.y * std::sin(headYaw),
+            headOffset.x * std::sin(headYaw) + headOffset.y * std::cos(headYaw),
+            headOffset.z + headOffset.x * std::sin(headPitch)
+        );
+
+        m_eyePosition = m_transform.getPosition() + rotatedOffset;
+
         m_animationTime += deltaTime;
 
         // Handle input

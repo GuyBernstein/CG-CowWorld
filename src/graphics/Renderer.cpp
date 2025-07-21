@@ -5,7 +5,6 @@
 //==============================================================================
 
 #include "graphics/Renderer.h"
-#include "graphics/Shader.h"
 #include "graphics/Camera.h"
 #include "scene/Scene.h"
 #include "scene/GameObject.h"
@@ -158,5 +157,28 @@ namespace CowGL {
     void Renderer::clear(const glm::vec4 &color) {
         glClearColor(color.x, color.y, color.z, color.w);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    }
+
+    void Renderer::setupViewport(int windowWidth, int windowHeight) {
+        // Calculate viewport to maintain 4:3 aspect ratio
+        float targetAspect = 4.0f / 3.0f;
+        float windowAspect = (float)windowWidth / (float)windowHeight;
+
+        int viewportWidth, viewportHeight;
+        int viewportX = 0, viewportY = 0;
+
+        if (windowAspect > targetAspect) {
+            // Window is wider - add black bars on sides
+            viewportHeight = windowHeight;
+            viewportWidth = (int)(windowHeight * targetAspect);
+            viewportX = (windowWidth - viewportWidth) / 2;
+        } else {
+            // Window is taller - add black bars on top/bottom
+            viewportWidth = windowWidth;
+            viewportHeight = (int)(windowWidth / targetAspect);
+            viewportY = (windowHeight - viewportHeight) / 2;
+        }
+
+        glViewport(viewportX, viewportY, viewportWidth, viewportHeight);
     }
 } // namespace CowGL

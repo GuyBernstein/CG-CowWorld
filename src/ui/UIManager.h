@@ -41,6 +41,8 @@ namespace CowGL {
 
         void toggleLightingMenu();
 
+        void updateButtonPositions();
+
     private:
         void createTopMenu();
 

@@ -110,15 +110,19 @@ namespace CowGL {
     }
 
     void UIManager::createTopMenu() {
-        auto exitButton = std::make_shared<Button>("Exit", 5, 5, 45, 30);
+        // Create buttons at their actual rendered positions
+        auto window = Application::getInstance()->getWindow();
+        int height = window->getHeight();
+
+        auto exitButton = std::make_shared<Button>("Exit", 5, height - 35, 45, 30);
         exitButton->setCallback([]() { exit(0); });
         m_topMenuButtons.push_back(exitButton);
 
-        auto helpButton = std::make_shared<Button>("Help", 55, 5, 50, 30);
+        auto helpButton = std::make_shared<Button>("Help", 55, height - 35, 50, 30);
         helpButton->setCallback([this]() { toggleHelpMenu(); });
         m_topMenuButtons.push_back(helpButton);
 
-        auto lightingButton = std::make_shared<Button>("Adjust Lighting", 110, 5, 135, 30);
+        auto lightingButton = std::make_shared<Button>("Adjust Lighting", 110, height - 35, 135, 30);
         lightingButton->setCallback([this]() { toggleLightingMenu(); });
         m_topMenuButtons.push_back(lightingButton);
     }
@@ -126,43 +130,14 @@ namespace CowGL {
     void UIManager::renderTopMenu() {
         auto window = Application::getInstance()->getWindow();
         int width = window->getWidth();
-        int height = window->getHeight();
+        int buttonX = width - 150; // 150 pixels from right edge
 
-        // Setup viewport for UI
-        glViewport(0, 0, width, height);
+        auto exitButton = std::make_shared<Button>("Exit", buttonX, 50, 120, 35);
+        auto helpButton = std::make_shared<Button>("Help", buttonX, 95, 120, 35);
+        auto lightingButton = std::make_shared<Button>("Lighting", buttonX, 140, 120, 35);
 
-        glMatrixMode(GL_PROJECTION);
-        glLoadIdentity();
-        gluOrtho2D(0, width, 0, height);
-
-        glMatrixMode(GL_MODELVIEW);
-        glLoadIdentity();
-
-        // Draw background bar at top
-        glColor4f(0.9f, 0.9f, 0.9f, 0.9f);
-        glBegin(GL_QUADS);
-        glVertex2f(0, height - 40);
-        glVertex2f(width, height - 40);
-        glVertex2f(width, height);
-        glVertex2f(0, height);
-        glEnd();
-
-        // Draw frame
-        glColor3f(0.0f, 0.0f, 0.0f);
-        glLineWidth(2.0f);
-        glBegin(GL_LINE_LOOP);
-        glVertex2f(1, height - 39);
-        glVertex2f(width - 1, height - 39);
-        glVertex2f(width - 1, height - 1);
-        glVertex2f(1, height - 1);
-        glEnd();
-
-        // Render buttons (adjust Y coordinate for top positioning)
         for (auto &button: m_topMenuButtons) {
-            int oldY = button->getY();
-            button->setPosition(button->getX(), height - 35);
             button->render();
-            button->setPosition(button->getX(), oldY);
         }
     }
 
@@ -226,17 +201,22 @@ namespace CowGL {
             glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, *c);
         }
 
-        // Help text
         const char *helpText[] = {
             "*** MAKE SURE KEYBOARD LANGUAGE IS ENGLISH ***",
             "Cow Movement: W,A,S,D keys",
-            "Head Movement: I,J,K,L keys",
+            "Control Modes:",
+            "  M - Movement mode (default)",
+            "  H - Head control mode",
+            "  T - Tail control mode",
+            "Head/Tail Movement: I,J,K,L keys (after pressing H or T)",
             "Toggle Camera View: V key",
+            "Reset Head/Tail: R key",
             "Quit: Q key",
             "",
-            "Mouse controls:",
-            "Click and drag to rotate camera (third person)",
-            "Click menu buttons for actions",
+            "Camera controls (third person):",
+            "  Numpad 8,2,4,6 - Rotate camera",
+            "  Numpad 1,7 - Zoom in/out",
+            "  Numpad 5 - Reset camera",
             "",
             "Press ENTER to close this window"
         };
@@ -383,5 +363,9 @@ namespace CowGL {
         if (m_showLightingMenu) {
             m_showHelpMenu = false;
         }
+    }
+
+    void UIManager::updateButtonPositions() {
+
     }
 } // namespace CowGL

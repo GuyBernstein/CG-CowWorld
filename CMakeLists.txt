@@ -26,8 +26,6 @@ add_executable(CG-CowGL
         src/core/Input.h
         src/graphics/Renderer.cpp
         src/graphics/Renderer.h
-        src/graphics/Shader.cpp
-        src/graphics/Shader.h
         src/graphics/Mesh.cpp
         src/graphics/Mesh.h
         src/graphics/Camera.cpp
@@ -49,13 +47,9 @@ add_executable(CG-CowGL
         src/ui/Button.cpp
         src/ui/Button.h
         src/utils/Math.h
-        src/utils/ResourceManager.cpp
-        src/utils/ResourceManager.h
 )
 
 target_link_libraries(CG-CowGL
         "-framework OpenGL"
         "-framework GLUT"
 )
-
-file(COPY shaders DESTINATION ${CMAKE_CURRENT_BINARY_DIR})

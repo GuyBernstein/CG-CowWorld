@@ -14,7 +14,6 @@
 
 namespace CowGL {
     class Scene;
-    class Shader;
     class Camera;
 
     class Renderer {
@@ -37,16 +36,14 @@ namespace CowGL {
 
         void clear(const glm::vec4 &color = glm::vec4(0.529f, 0.808f, 0.922f, 1.0f));
 
-        Shader *getDefaultShader() const { return m_defaultShader.get(); }
-        Shader *getUIShader() const { return m_uiShader.get(); }
+        void setupViewport(int windowWidth, int windowHeight);
+
 
     private:
         void setupLighting(Scene *scene);
 
         void renderSkybox();
 
-        std::unique_ptr<Shader> m_defaultShader;
-        std::unique_ptr<Shader> m_uiShader;
 
         glm::mat4 m_viewMatrix;
         glm::mat4 m_projectionMatrix;

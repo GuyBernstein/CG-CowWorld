@@ -18,6 +18,7 @@ namespace CowGL {
         using KeyboardCallback = std::function<void(unsigned char, int, int)>;
         using MouseCallback = std::function<void(int, int, int, int)>;
         using MouseMoveCallback = std::function<void(int, int)>;
+        using ReshapeCallback = std::function<void(int, int)>;
 
         Window(const std::string &title, int width, int height);
 
@@ -33,12 +34,20 @@ namespace CowGL {
 
         void setMouseMoveCallback(MouseMoveCallback callback);
 
+        void setReshapeCallback(ReshapeCallback callback);
+
         int getWidth() const { return m_width; }
+
         int getHeight() const { return m_height; }
+
+        void setWidth(int width) { m_width = width; }
+
+        void setHeight(int height) { m_height = height; }
 
         void swapBuffers();
 
         void requestRedraw();
+
 
     private:
         static void displayCallbackWrapper();
@@ -51,11 +60,15 @@ namespace CowGL {
 
         static void mouseMoveCallbackWrapper(int x, int y);
 
+        static void reshapeCallbackWrapper(int width, int height);
+
+
         static DisplayCallback s_displayCallback;
         static KeyboardCallback s_keyboardCallback;
         static KeyboardCallback s_keyboardUpCallback;
         static MouseCallback s_mouseCallback;
         static MouseMoveCallback s_mouseMoveCallback;
+        static ReshapeCallback s_reshapeCallback;
 
         int m_width;
         int m_height;

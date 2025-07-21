@@ -51,6 +51,15 @@ namespace CowGL {
     }
 
     void Button::render() {
+        // Add shadow effect for depth
+        glColor3f(0.3f, 0.3f, 0.3f);
+        glBegin(GL_QUADS);
+        glVertex2f(m_x + 2, m_y - 2);
+        glVertex2f(m_x + m_width + 2, m_y - 2);
+        glVertex2f(m_x + m_width + 2, m_y + m_height - 2);
+        glVertex2f(m_x + 2, m_y + m_height - 2);
+        glEnd();
+
         // Button background
         if (m_pressed) {
             glColor3f(0.5f, 0.5f, 0.5f);
