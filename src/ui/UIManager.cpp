@@ -56,10 +56,6 @@ namespace CowGL {
             if (m_showLightingMenu) hideLightingMenu();
         }
 
-        if (input->isKeyJustPressed('h') || input->isKeyJustPressed('H')) {
-            toggleHelpMenu();
-        }
-
         // Handle lighting adjustments when menu is open
         if (m_showLightingMenu) {
             if (input->isKeyPressed('+') || input->isKeyPressed('=')) {
@@ -101,6 +97,19 @@ namespace CowGL {
         glPushMatrix();
         glMatrixMode(GL_MODELVIEW);
         glPushMatrix();
+
+        // Set up orthographic projection for UI
+        auto window = Application::getInstance()->getWindow();
+        int width = window->getWidth();
+        int height = window->getHeight();
+
+        glViewport(0, 0, width, height);
+        glMatrixMode(GL_PROJECTION);
+        glLoadIdentity();
+        gluOrtho2D(0, width, 0, height);
+
+        glMatrixMode(GL_MODELVIEW);
+        glLoadIdentity();
 
         // Disable depth test and lighting for UI
         glDisable(GL_DEPTH_TEST);
