@@ -8,6 +8,8 @@
 #define CAMERA_H
 
 
+#include "entities/Cow.h"
+#include "scene/Scene.h"
 #include "utils/Math.h"
 
 namespace CowGL {
@@ -47,7 +49,7 @@ namespace CowGL {
 
         void zoom(float delta);
 
-        void setFollowTarget(glm::vec3 *target) { m_followTarget = target; }
+        void setFollowTarget(const glm::vec3 *target) { m_followTarget = target; }
 
         // Third person camera controls
         void setOrbitDistance(float distance) { m_orbitDistance = distance; }
@@ -55,6 +57,7 @@ namespace CowGL {
         void setOrbitAngles(float horizontal, float vertical);
 
         float getOrbitDistance() const { return m_orbitDistance; }
+
 
     private:
         void updateFirstPerson();
@@ -75,7 +78,7 @@ namespace CowGL {
         float m_pitch;
 
         // Third person
-        glm::vec3 *m_followTarget;
+        const glm::vec3 *m_followTarget;
         float m_orbitDistance;
         float m_orbitHorizontalAngle;
         float m_orbitVerticalAngle;

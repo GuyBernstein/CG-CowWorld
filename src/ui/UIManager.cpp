@@ -16,6 +16,8 @@
 #include <GLUT/glut.h>
 #include <OpenGL/gl.h>
 
+#include "entities/Cow.h"
+
 namespace CowGL {
     UIManager::UIManager()
         : m_showHelpMenu(false)
@@ -32,11 +34,24 @@ namespace CowGL {
     }
 
     void UIManager::update(float deltaTime) {
-        // Handle input for menus
         Input *input = Application::getInstance()->getInput();
 
+        // Check for help menu toggle ONLY if not in head control mode
+        if (!m_showHelpMenu && !m_showLightingMenu) {
+            // Only process H key for help if cow is not in head control mode
+            auto scene = Application::getInstance()->getScene();
+            auto cowObj = scene->findGameObject("MainCow");
+            if (cowObj) {
+                auto cow = std::dynamic_pointer_cast<Cow>(cowObj);
+                if (!cow || cow->getControlMode() != Cow::ControlMode::Head) {
+                    if (input->isKeyJustPressed('h') || input->isKeyJustPressed('H')) {
+                        toggleHelpMenu();
+                    }
+                }
+            }
+        }
+
         if (input->isKeyJustPressed('\r')) {
-            // Enter key
             if (m_showHelpMenu) hideHelpMenu();
             if (m_showLightingMenu) hideLightingMenu();
         }
@@ -110,34 +125,43 @@ namespace CowGL {
     }
 
     void UIManager::createTopMenu() {
-        // Create buttons at their actual rendered positions
         auto window = Application::getInstance()->getWindow();
+        int width = window->getWidth();
         int height = window->getHeight();
 
-        auto exitButton = std::make_shared<Button>("Exit", 5, height - 35, 45, 30);
+        // Position buttons on the right side of screen, near the top
+        int buttonX = width - 150; // 150 pixels from right edge
+
+        auto exitButton = std::make_shared<Button>("Exit", buttonX, height - 50, 120, 35);
         exitButton->setCallback([]() { exit(0); });
         m_topMenuButtons.push_back(exitButton);
 
-        auto helpButton = std::make_shared<Button>("Help", 55, height - 35, 50, 30);
+        auto helpButton = std::make_shared<Button>("Help", buttonX, height - 95, 120, 35);
         helpButton->setCallback([this]() { toggleHelpMenu(); });
         m_topMenuButtons.push_back(helpButton);
 
-        auto lightingButton = std::make_shared<Button>("Adjust Lighting", 110, height - 35, 135, 30);
+        auto lightingButton = std::make_shared<Button>("Lighting", buttonX, height - 140, 120, 35);
         lightingButton->setCallback([this]() { toggleLightingMenu(); });
         m_topMenuButtons.push_back(lightingButton);
     }
 
     void UIManager::renderTopMenu() {
-        auto window = Application::getInstance()->getWindow();
-        int width = window->getWidth();
-        int buttonX = width - 150; // 150 pixels from right edge
-
-        auto exitButton = std::make_shared<Button>("Exit", buttonX, 50, 120, 35);
-        auto helpButton = std::make_shared<Button>("Help", buttonX, 95, 120, 35);
-        auto lightingButton = std::make_shared<Button>("Lighting", buttonX, 140, 120, 35);
-
+        // Remove the redundant button creation - just render existing buttons
         for (auto &button: m_topMenuButtons) {
             button->render();
+        }
+    }
+
+    void UIManager::updateButtonPositions() {
+        auto window = Application::getInstance()->getWindow();
+        int width = window->getWidth();
+        int height = window->getHeight();
+        int buttonX = width - 150;
+
+        if (m_topMenuButtons.size() >= 3) {
+            m_topMenuButtons[0]->setPosition(buttonX, height - 50); // Exit
+            m_topMenuButtons[1]->setPosition(buttonX, height - 95); // Help
+            m_topMenuButtons[2]->setPosition(buttonX, height - 140); // Lighting
         }
     }
 
@@ -363,9 +387,5 @@ namespace CowGL {
         if (m_showLightingMenu) {
             m_showHelpMenu = false;
         }
-    }
-
-    void UIManager::updateButtonPositions() {
-
     }
 } // namespace CowGL

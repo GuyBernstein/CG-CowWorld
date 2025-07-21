@@ -64,6 +64,8 @@ namespace CowGL {
 
         const glm::vec3 &getEyePositionRef() const { return m_eyePosition; }
 
+        ControlMode getControlMode() const { return m_controlMode; }
+
     protected:
         void onRender() override;
 

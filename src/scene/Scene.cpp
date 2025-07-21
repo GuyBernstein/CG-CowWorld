@@ -51,8 +51,8 @@ namespace CowGL {
         if (input->isKeyJustPressed('v') || input->isKeyJustPressed('V')) {
             if (m_activeCamera->getMode() == Camera::Mode::ThirdPerson) {
                 m_activeCamera->setMode(Camera::Mode::FirstPerson);
-                // Set first person position from cow's eyes
-                m_activeCamera->setFollowTarget(const_cast<glm::vec3 *>(&m_cow->getEyePositionRef()));
+                // Use a pointer to the eye position member variable
+                m_activeCamera->setFollowTarget(&m_cow->getEyePositionRef());
             } else {
                 m_activeCamera->setMode(Camera::Mode::ThirdPerson);
                 m_activeCamera->setFollowTarget(&m_cow->getTransform().getPositionRef());

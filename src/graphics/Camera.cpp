@@ -40,16 +40,15 @@ namespace CowGL {
 
     void Camera::updateFirstPerson() {
         if (m_followTarget) {
-            // For first person, we need to get the cow reference
+            // Use the follow target directly (it's the eye position)
+            m_position = *m_followTarget;
+
+            // Get cow to determine look direction
             auto scene = Application::getInstance()->getScene();
             auto cowObj = scene->findGameObject("MainCow");
             if (cowObj) {
                 auto cow = std::dynamic_pointer_cast<Cow>(cowObj);
                 if (cow) {
-                    // Set position at cow's eye level
-                    m_position = cow->getEyePosition();
-
-                    // Set target based on cow's look direction
                     m_target = m_position + cow->getLookDirection();
                 }
             }
