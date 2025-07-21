@@ -36,8 +36,8 @@ namespace CowGL {
                 updateThirdPerson();
                 break;
         }
-    }
 
+    }
     void Camera::updateFirstPerson() {
         if (m_followTarget) {
             // Get cow to determine eye position and look direction

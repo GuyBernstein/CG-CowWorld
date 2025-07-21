@@ -47,7 +47,7 @@ namespace CowGL {
         void createDefaultScene();
 
         void handleCameraControls(float deltaTime);
-
+        std::unique_ptr<Camera> m_camera;
         std::vector<std::shared_ptr<GameObject> > m_gameObjects;
         std::vector<std::shared_ptr<Light> > m_lights;
         Camera *m_activeCamera;

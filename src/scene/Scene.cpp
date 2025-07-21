@@ -162,9 +162,9 @@ namespace CowGL {
         }
 
         // Create camera
-        auto camera = std::make_unique<Camera>();
-        camera->setMode(Camera::Mode::ThirdPerson);
-        camera->setFollowTarget(&m_cow->getTransform().getPositionRef());
-        setActiveCamera(camera.release());
+        m_camera = std::make_unique<Camera>();
+        m_camera->setMode(Camera::Mode::ThirdPerson);
+        m_camera->setFollowTarget(&m_cow->getTransform().getPositionRef());
+        m_activeCamera = m_camera.get();  // Set the raw pointer
     }
 } // namespace CowGL

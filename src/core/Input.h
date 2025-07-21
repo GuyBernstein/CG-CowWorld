@@ -22,7 +22,14 @@ namespace CowGL {
             Count
         };
 
-        Input() = default;
+        Input() : m_mouseButtonStates{},
+                  m_mouseButtonJustPressed{},
+                  m_mousePosition(0.0f, 0.0f),
+                  m_lastMousePosition(0.0f, 0.0f),
+                  m_mouseDelta(0.0f, 0.0f) {
+            m_mouseButtonStates.fill(false);
+            m_mouseButtonJustPressed.fill(false);
+        }
 
         ~Input() = default;
 
