@@ -7,6 +7,6 @@ The user can control the movement of the cow, camera positioning and the lightin
 2. Open Project through Clion
 3. Run The project
 ## RUNNING THE PROGRAM
-Double-click on the output .exe file or Debug in Visual Studio. </br>
+Double-click on the output .exe file or Run in Clion (MacOS). </br>
 Enjoy! </br> </br>
-![image](https://github.com/0rokuSaki/CG-CowGL/assets/54452602/a1472d6f-d7a0-4fd7-8676-e5d6ed03ae1d)
+![image](./screen-shot.png)
