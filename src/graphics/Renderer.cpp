@@ -155,54 +155,81 @@ namespace CowGL {
 
         // Save current state
         glPushMatrix();
-        glPushAttrib(GL_ENABLE_BIT | GL_CURRENT_BIT);
+        glPushAttrib(GL_ENABLE_BIT | GL_CURRENT_BIT | GL_DEPTH_BUFFER_BIT);
 
-        // Disable lighting for sky rendering to prevent sun light from affecting sky color
+        // Disable depth writes and testing for sky rendering
+        glDisable(GL_DEPTH_TEST);
+        glDepthMask(GL_FALSE);
+
+        // Disable lighting for sky rendering
         glDisable(GL_LIGHTING);
 
-        // Calculate sky color based on sun intensity and ambient light
-        // Base sky color
+        // Enable backface culling to render inside of sphere
+        glEnable(GL_CULL_FACE);
+        glCullFace(GL_FRONT); // Cull front faces since we're inside the sphere
+
+        // Move sky sphere to camera position to ensure it always surrounds the viewer
+        Camera *camera = app->getScene()->getActiveCamera();
+        if (camera) {
+            glm::vec3 camPos = camera->getPosition();
+            glTranslatef(camPos.x, camPos.y, camPos.z);
+        }
+
+        // Use bright blue sky color without dimming
         float baseR = 0.529f, baseG = 0.808f, baseB = 0.922f;
 
-        // Modulate sky brightness based on ambient light and sun position
+        // Optional: slightly modulate based on sun position for atmosphere effect
         float sunHeight = std::sin(glm::radians(sunAngleValue));
-        float skyBrightness = 0.6f + 0.2f * globalAmbientValue + 0.2f * std::max(0.0f, sunHeight);
-        skyBrightness = CowGL::clamp(skyBrightness, 0.3f, 1.0f);
+        float atmosphereEffect = 0.9f + 0.1f * std::max(0.0f, sunHeight);
 
-        // Set sky color directly without lighting
+        // Set bright sky color
         glColor3f(
-            baseR * skyBrightness,
-            baseG * skyBrightness,
-            baseB * skyBrightness
+            baseR * atmosphereEffect,
+            baseG * atmosphereEffect,
+            baseB * atmosphereEffect
         );
 
         // Render sky sphere
-        glutSolidSphere(200.0, 50, 50);
+        glutSolidSphere(150.0, 50, 50); // Slightly smaller radius to ensure we're well inside
+
+        // Reset culling for sun
+        glCullFace(GL_BACK);
 
         // Render sun
         glPushMatrix();
+
+        // Position sun relative to world origin (not camera)
+        // First, undo the camera translation
+        if (camera) {
+            glm::vec3 camPos = camera->getPosition();
+            glTranslatef(-camPos.x, -camPos.y, -camPos.z);
+        }
+
         float angleRad = glm::radians(sunAngleValue);
-        // Position sun well outside the sky sphere to avoid occlusion
-        float sunDistance = 190.0f; // Just inside the sky sphere for proper visibility
+        float sunDistance = 140.0f; // Place sun inside the sky sphere
         glTranslatef(
             sunDistance * std::cos(angleRad),
             sunDistance * std::sin(angleRad),
-            0.0f
+            50.0f // Raise sun position for better visibility
         );
 
         // Sun color: warm yellow-orange that varies with intensity
         glColor3f(
-            1.0f * sunIntensityValue, // Full red
-            0.95f * sunIntensityValue, // Slightly less green for warmth
-            0.4f * sunIntensityValue // Much less blue for orange tint
+            1.0f * sunIntensityValue,
+            0.95f * sunIntensityValue,
+            0.4f * sunIntensityValue
         );
 
         // Render sun as a sphere
-        glutSolidSphere(10.0, 20, 20);
+        glutSolidSphere(8.0, 20, 20);
 
         glPopMatrix();
 
         // Restore state
+        glDisable(GL_CULL_FACE);
+        glDepthMask(GL_TRUE);
+        glEnable(GL_DEPTH_TEST);
+
         glPopAttrib();
         glPopMatrix();
 
