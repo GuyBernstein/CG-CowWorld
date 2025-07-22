@@ -223,6 +223,11 @@ namespace CowGL {
         glMaterialf(GL_FRONT, GL_SHININESS, 20.0f);
 
         gluCylinder(quadric, 0.5f, 0.5f, 1.4f, 20, 20);
+        glRotatef(180.0f, 1.0f, 0.0f, 0.0f);
+        gluDisk(quadric, 0.0f, 0.5f, 20, 20);
+        glTranslatef(0.0f, 0.0f, -1.4f);
+        glutSolidSphere(0.5f, 20, 20);
+        glPopMatrix();
 
         // Udder
         glPushMatrix();
