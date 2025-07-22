@@ -153,54 +153,61 @@ namespace CowGL {
         float sunIntensityValue = uiManager ? uiManager->getSunIntensity() : 1.0f;
         float sunAngleValue = uiManager ? uiManager->getSunAngle() : 45.0f;
 
+        // Save current state
         glPushMatrix();
+        glPushAttrib(GL_ENABLE_BIT | GL_CURRENT_BIT);
+
+        // Disable lighting for sky rendering to prevent sun light from affecting sky color
+        glDisable(GL_LIGHTING);
 
         // Calculate sky color based on sun intensity and ambient light
         // Base sky color
         float baseR = 0.529f, baseG = 0.808f, baseB = 0.922f;
 
-        // Modulate sky color by sun intensity and ambient
-        float lightingFactor = (globalAmbientValue + sunIntensityValue) * 0.5f;
-        lightingFactor = CowGL::clamp(lightingFactor, 0.1f, 1.0f);
-
-        // Create a gradient effect based on sun angle
+        // Modulate sky brightness based on ambient light and sun position
         float sunHeight = std::sin(glm::radians(sunAngleValue));
-        float skyBrightness = 0.3f + 0.7f * std::max(0.0f, sunHeight);
+        float skyBrightness = 0.6f + 0.2f * globalAmbientValue + 0.2f * std::max(0.0f, sunHeight);
+        skyBrightness = CowGL::clamp(skyBrightness, 0.3f, 1.0f);
 
-        GLfloat skyColor[] = {
-            baseR * lightingFactor * skyBrightness,
-            baseG * lightingFactor * skyBrightness,
-            baseB * lightingFactor * skyBrightness,
-            1.0f
-        };
+        // Set sky color directly without lighting
+        glColor3f(
+            baseR * skyBrightness,
+            baseG * skyBrightness,
+            baseB * skyBrightness
+        );
 
-        // Remove emission - let the sky be affected by lighting
-        glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, skyColor);
-        GLfloat noEmission[] = {0.0f, 0.0f, 0.0f, 1.0f};
-        glMaterialfv(GL_FRONT, GL_EMISSION, noEmission);
-
-        // Add slight specular for sun reflection effect
-        GLfloat skySpecular[] = {0.2f, 0.2f, 0.2f, 1.0f};
-        glMaterialfv(GL_FRONT, GL_SPECULAR, skySpecular);
-        glMaterialf(GL_FRONT, GL_SHININESS, 10.0f);
-
+        // Render sky sphere
         glutSolidSphere(200.0, 50, 50);
 
-        // Add a visible sun indicator
+        // Render sun
         glPushMatrix();
         float angleRad = glm::radians(sunAngleValue);
-        glTranslatef(50.0f * std::cos(angleRad), 50.0f * std::sin(angleRad), 100.0f);
+        // Position sun well outside the sky sphere to avoid occlusion
+        float sunDistance = 190.0f; // Just inside the sky sphere for proper visibility
+        glTranslatef(
+            sunDistance * std::cos(angleRad),
+            sunDistance * std::sin(angleRad),
+            0.0f
+        );
 
-        // Sun sphere with emission
-        GLfloat sunEmission[] = {sunIntensityValue, sunIntensityValue * 0.9f, sunIntensityValue * 0.7f, 1.0f};
-        GLfloat sunColor[] = {1.0f, 0.95f, 0.8f, 1.0f};
-        glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, sunColor);
-        glMaterialfv(GL_FRONT, GL_EMISSION, sunEmission);
+        // Sun color: warm yellow-orange that varies with intensity
+        glColor3f(
+            1.0f * sunIntensityValue, // Full red
+            0.95f * sunIntensityValue, // Slightly less green for warmth
+            0.4f * sunIntensityValue // Much less blue for orange tint
+        );
 
-        glutSolidSphere(5.0, 20, 20);
+        // Render sun as a sphere
+        glutSolidSphere(10.0, 20, 20);
+
         glPopMatrix();
 
+        // Restore state
+        glPopAttrib();
         glPopMatrix();
+
+        // Re-enable lighting for subsequent rendering
+        glEnable(GL_LIGHTING);
     }
 
     void Renderer::setViewport(int x, int y, int width, int height) {
