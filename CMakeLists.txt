@@ -26,8 +26,6 @@ add_executable(CG-CowGL
         src/core/Input.h
         src/graphics/Renderer.cpp
         src/graphics/Renderer.h
-        src/graphics/Mesh.cpp
-        src/graphics/Mesh.h
         src/graphics/Camera.cpp
         src/graphics/Camera.h
         src/graphics/Light.cpp

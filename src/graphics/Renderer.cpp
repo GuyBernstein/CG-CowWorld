@@ -24,9 +24,6 @@ namespace CowGL {
     Renderer::~Renderer() = default;
 
     void Renderer::initialize() {
-        // For this example, we'll continue using the fixed-function pipeline
-        // In a real refactor, we'd implement proper shader support
-
         // Enable depth testing
         glEnable(GL_DEPTH_TEST);
         glDepthFunc(GL_LESS);

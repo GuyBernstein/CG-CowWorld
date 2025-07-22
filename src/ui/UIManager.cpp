@@ -149,7 +149,6 @@ namespace CowGL {
     }
 
     void UIManager::renderTopMenu() {
-        // Remove the redundant button creation - just render existing buttons
         for (auto &button: m_topMenuButtons) {
             button->render();
         }

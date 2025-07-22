@@ -11,9 +11,6 @@
 #include <cmath>
 #include <algorithm>
 
-// For this example, we'll use basic math structures
-// In a real project, you'd use GLM or a similar math library
-
 namespace glm {
     struct vec2 {
         float x, y;
